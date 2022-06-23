@@ -19,6 +19,11 @@ class CreatePengeluaranDetail extends Migration
             $table->foreign('id_pengeluaran')->references('id')->on('pengeluaran');
             $table->unsignedBigInteger('id_inventory')->nullable();
             $table->foreign('id_inventory')->references('id')->on('inventory');
+            $table->unsignedBigInteger('id_rak')->nullable();
+            $table->foreign('id_rak')->references('id')->on('rak');
+            $table->unsignedBigInteger('id_item')->nullable();
+            $table->foreign('id_item')->references('id')->on('item');
+            $table->double('qty')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

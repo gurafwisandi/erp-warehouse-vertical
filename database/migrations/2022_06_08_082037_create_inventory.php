@@ -17,7 +17,6 @@ class CreateInventory extends Migration
             $table->id();
             $table->string('kode_item', 64)->nullable();
             $table->date('tgl_masuk_gudang');
-            $table->date('tgl_expired');
             $table->double('qty')->nullable();
             $table->unsignedBigInteger('id_rak')->nullable();
             $table->foreign('id_rak')->references('id')->on('rak');

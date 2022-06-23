@@ -16,7 +16,7 @@ class TambahIdReceive extends Migration
         Schema::table('inventory', function (Blueprint $table) {
             $table->unsignedBigInteger('id_receive')->nullable()->after('id_item');
             $table->foreign('id_receive')->references('id')->on('receive');
-            $table->string('status', 3)->nullable()->after('id_receive_detail');
+            $table->string('status', 3)->nullable()->after('qty');
         });
     }
 

@@ -18,9 +18,9 @@ class CreatePengeluaran extends Migration
             $table->string('kode_pengeluaran', 64);
             $table->date('tgl_pengeluaran');
             $table->string('keterangan', 128);
+            $table->string('status', 25)->nullable();
             $table->unsignedBigInteger('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users');
-            $table->string('status', 25)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
