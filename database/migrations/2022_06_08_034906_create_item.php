@@ -21,6 +21,7 @@ class CreateItem extends Migration
             $table->string('type', 64);
             $table->string('bentuk_barang', 64);
             $table->string('keterangan', 128);
+            $table->double('qty')->nullable();
             $table->unsignedBigInteger('id_vendor')->nullable();
             $table->foreign('id_vendor')->references('id')->on('vendor');
             $table->unsignedBigInteger('id_user')->nullable();

@@ -16,6 +16,7 @@ class CreateRak extends Migration
         Schema::create('rak', function (Blueprint $table) {
             $table->id();
             $table->string('no_rak', 64);
+            $table->string('lokasi', 64);
             $table->string('keterangan', 128);
             $table->timestamps();
             $table->softDeletes();

@@ -18,6 +18,7 @@ class CreateReceive extends Migration
             $table->string('kode_receive', 64);
             $table->date('tgl_receive');
             $table->string('keterangan', 128);
+            $table->string('status', 25)->nullable();
             $table->unsignedBigInteger('id_vendor')->nullable();
             $table->foreign('id_vendor')->references('id')->on('vendor');
             $table->unsignedBigInteger('id_user')->nullable();

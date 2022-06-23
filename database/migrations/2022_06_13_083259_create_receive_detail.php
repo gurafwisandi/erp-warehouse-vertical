@@ -19,9 +19,8 @@ class CreateReceiveDetail extends Migration
             $table->foreign('id_receive')->references('id')->on('receive');
             $table->unsignedBigInteger('id_item')->nullable();
             $table->foreign('id_item')->references('id')->on('item');
-            $table->unsignedBigInteger('id_rak')->nullable();
-            $table->foreign('id_rak')->references('id')->on('rak');
             $table->double('qty')->nullable();
+            $table->double('qty_terima')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
