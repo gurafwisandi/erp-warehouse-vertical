@@ -46,8 +46,7 @@
                                         <div class="form-group mb-0">
                                             <label class="my-2 py-1">Vendor</label>
                                             <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="id_vendor"
-                                                    disabled>
+                                                <select class=" form-control mb-3 custom-select" name="id_vendor" disabled>
                                                     <option value="">--Pilih Vendor--</option>
                                                     @foreach ($vendor as $vendor)
                                                         <option value="{{ $vendor->id }}"
@@ -78,18 +77,23 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Type</th>
                                                 <th>Item</th>
                                                 <th>Qty</th>
+                                                <th>Qty yang diterima</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($details as $detail)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $detail->type }}</td>
-                                                    <td>{{ $detail->items->nama }}</td>
-                                                    <td>{{ $detail->qty }}</td>
+                                                    <td>{{ $detail->items->nama . ' - ' . $detail->items->panjang . 'm' }}
+                                                    </td>
+                                                    <td>{{ $detail->qty . ' ' . $detail->items->satuan }}</td>
+                                                    <td>{{ $detail->qty_terima }}
+                                                        @if ($detail->qty_terima)
+                                                            {{ $detail->items->satuan }}
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -105,22 +109,21 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Type</th>
-                                                <th>Kode Item</th>
                                                 <th>Item</th>
                                                 <th>Rak</th>
                                                 <th>Qty</th>
+                                                <th>Tgl Masuk Gudang</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($invens as $inven)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $inven->items->type }}</td>
-                                                    <td>{{ $inven->kode_item }}</td>
-                                                    <td>{{ $inven->items->nama }}</td>
-                                                    <td>{{ $inven->raks->no_rak }}</td>
-                                                    <td>{{ $inven->qty }}</td>
+                                                    <td>{{ $inven->items->nama . ' - ' . $inven->items->panjang . 'm' }}
+                                                    </td>
+                                                    <td>{{ $inven->raks->no_rak . ' - ' . $inven->raks->lokasi }}</td>
+                                                    <td>{{ $inven->qty . ' ' . $inven->items->satuan }}</td>
+                                                    <td>{{ $inven->tgl_masuk_gudang }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -139,4 +142,6 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('assets/alert.js') }}"></script>
 @endsection

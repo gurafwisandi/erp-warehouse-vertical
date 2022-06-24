@@ -21,4 +21,9 @@ class InventoryModel extends Model
     {
         return $this->belongsTo(RakModel::class, 'id_rak');
     }
+
+    public function receive()
+    {
+        return $this->belongsTo(ReceiveModel::class, 'id_receive');
+    }
 }

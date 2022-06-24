@@ -11,4 +11,9 @@ class RakModel extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'rak';
     protected $guarded = [];
+
+    public function items()
+    {
+        return $this->belongsTo(ItemModel::class, 'id_item');
+    }
 }

@@ -18,6 +18,8 @@ class CreateRak extends Migration
             $table->string('no_rak', 64);
             $table->string('lokasi', 64);
             $table->string('keterangan', 128);
+            $table->unsignedBigInteger('id_item')->nullable();
+            $table->foreign('id_item')->references('id')->on('item');
             $table->timestamps();
             $table->softDeletes();
         });

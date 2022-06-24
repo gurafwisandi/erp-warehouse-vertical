@@ -28,12 +28,25 @@
                                         value="{{ $item->no_rak }}" placeholder="No Rak" />
                                     {!! $errors->first('no_rak', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-0">
+                                    <label class="my-2 pb-1">Lokasi</label>
+                                    <input type="text" class="form-control" name="lokasi" disabled
+                                        value="{{ $item->lokasi }}" placeholder="Lokasi" />
+                                    {!! $errors->first('lokasi', '<div class="invalid-validasi">:message</div>') !!}
+                                </div>
+                                <div class="form-group mb-0">
                                     <label class="my-2 py-1">Keterangan</label>
                                     <div>
                                         <textarea disabled name="keterangan" class="form-control" rows="5" placeholder="Keterangan">{{ $item->keterangan }}</textarea>
                                         {!! $errors->first('keterangan', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="my-2 pb-1">Item</label>
+                                    <input type="text" class="form-control" name="no_rak" disabled
+                                        value="{{ $item->items->nama . ' - ' . $item->items->panjang . 'm' }}"
+                                        placeholder="Item" />
+                                    {!! $errors->first('no_rak', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
                                     <div>

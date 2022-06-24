@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\InventoryModel;
+use App\Models\ItemModel;
 use App\Models\RakModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -39,6 +40,7 @@ class RakController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'add',
+            'items' => ItemModel::all(),
         ];
         return view('rak.add')->with($data);
     }
@@ -54,12 +56,16 @@ class RakController extends Controller
         $request->validate([
             'no_rak' => 'required|max:64|unique:rak,no_rak,NULL,id,deleted_at,NULL',
             'keterangan' => 'required|max:128',
+            'lokasi' => 'required',
+            'id_item' => 'required',
         ]);
         DB::beginTransaction();
         try {
             $item = new RakModel();
             $item->no_rak = $request->no_rak;
+            $item->lokasi = $request->lokasi;
             $item->keterangan = $request->keterangan;
+            $item->id_item = $request->id_item;
             $item->save();
             DB::commit();
             AlertHelper::addAlert(true);
@@ -100,6 +106,7 @@ class RakController extends Controller
             'menu' => $this->menu,
             'title' => 'edit',
             'item' => RakModel::findorfail(Crypt::decryptString($id)),
+            'items' => ItemModel::all(),
         ];
         return view('rak.edit')->with($data);
     }
@@ -117,12 +124,16 @@ class RakController extends Controller
         $request->validate([
             'no_rak' => "required|max:64|unique:rak,no_rak,$decrypted_id,id,deleted_at,NULL",
             'keterangan' => 'required|max:128',
+            'lokasi' => 'required',
+            'id_item' => 'required',
         ]);
         DB::beginTransaction();
         try {
             $item = RakModel::findOrFail($decrypted_id);
             $item->no_rak = $request->no_rak;
             $item->keterangan = $request->keterangan;
+            $item->lokasi = $request->lokasi;
+            $item->id_item = $request->id_item;
             $item->save();
             DB::commit();
             AlertHelper::updateAlert(true);
@@ -158,7 +169,7 @@ class RakController extends Controller
 
     public function stock_rak($id)
     {
-        $item = InventoryModel::where('id_rak', Crypt::decryptString($id))->where('status', 'IN')->orderBy('id', 'ASC')->get();
+        $item = InventoryModel::where('id_rak', Crypt::decryptString($id))->orderBy('id', 'ASC')->get();
         $data = [
             'menu' => $this->menu,
             'title' => 'stock',

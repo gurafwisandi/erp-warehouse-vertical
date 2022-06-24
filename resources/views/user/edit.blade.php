@@ -19,7 +19,8 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('user.update', Crypt::encryptString($item->id)) }}" method="POST">
+                            <form action="{{ route('user.update', Crypt::encryptString($item->id)) }}"
+                                enctype="multipart/form-data" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <div class="form-group mb-0">
@@ -48,7 +49,7 @@
                                 </div>
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">Roles</label>
-                                    <select class="select2 form-control mb-3 custom-select" name="roles" required>
+                                    <select class="form-control mb-3 custom-select" name="roles" required>
                                         <option value="">--Pilih Status--</option>
                                         <option value="Purchasing" {{ $item->roles == 'Purchasing' ? 'selected' : '' }}>
                                             Purchasing
@@ -62,7 +63,7 @@
                                 </div>
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">Status</label>
-                                    <select class="select2 form-control mb-3 custom-select" name="status" required>
+                                    <select class="form-control mb-3 custom-select" name="status" required>
                                         <option value="">--Pilih Status--</option>
                                         <option value="Aktif" {{ $item->status == 'Aktif' ? 'selected' : '' }}>Aktif
                                         </option>
@@ -71,6 +72,16 @@
                                             Tidak Aktif</option>
                                     </select>
                                     {!! $errors->first('status', '<div class="invalid-validasi">:message</div>') !!}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="my-2 pb-1">Foto</label>
+                                    <input type="file" class="form-control" name="foto" placeholder="Foto" />
+                                    <input type="hidden" name="file_old" value="{{ $item->foto }}">
+                                    <?php if($item->foto){ ?>
+                                    <img src="{{ asset('files/foto/' . $item->foto) }}" alt="" width="300"
+                                        class="rounded avatar-md">
+                                    <?php } ?>
+                                    {!! $errors->first('foto', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">&nbsp;</label>

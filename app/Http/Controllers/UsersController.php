@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class UsersController extends Controller
 {
@@ -55,16 +58,25 @@ class UsersController extends Controller
             'email' => 'required|email:dns|unique:users,email,NULL,id,deleted_at,NULL|max:64',
             'password' => 'required|max:128',
             'roles' => 'required|max:64',
+            'foto' => 'mimes:png,jpeg,jpg|max:2048',
         ]);
         DB::beginTransaction();
         try {
-            User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'password' => bcrypt($validated['password']),
-                'roles' => $validated['roles'],
-                'status' => 'Aktif',
-            ]);
+            $user = new User();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->roles = $request->roles;
+            $user->password = bcrypt($request->password);
+            // upload file
+            if ($request->file()) {
+                $file = $request->file('foto');
+                $fileName = Carbon::now()->format('ymdhis') . '_' . Auth::user()->id . '_' . str::random(25) . '.' . $file->extension();
+                $user->foto = $fileName;
+                $file->move(public_path('files/foto'), $fileName);
+            }
+            $user->status = 'Aktif';
+            $user->save();
+
             DB::commit();
             AlertHelper::addAlert(true);
             return redirect('user');
@@ -119,6 +131,7 @@ class UsersController extends Controller
             'password' => 'required|max:128',
             'roles' => 'required|max:64',
             'status' => 'required',
+            'foto' => 'mimes:png,jpeg,jpg|max:2048',
         ]);
         DB::beginTransaction();
         try {
@@ -129,6 +142,16 @@ class UsersController extends Controller
                 $user->password = bcrypt($validated['password']);
             }
             $user->roles = $validated['roles'];
+            // upload file
+            if ($request->file()) {
+                $file = $request->file('foto');
+                $fileName = Carbon::now()->format('ymdhis') . '_' . Auth::user()->id . '_' . str::random(25) . '.' . $file->extension();
+                $user->foto = $fileName;
+                $file->move(public_path('files/foto'), $fileName);
+                // hapus file yg sebelumnya
+                $file_path = public_path() . '/files/foto/' . $request->file_old;
+                unlink($file_path);
+            }
             $user->status = $validated['status'];
             $user->save();
             DB::commit();
@@ -180,14 +203,27 @@ class UsersController extends Controller
             'name' => 'required|max:64',
             'email' => "required|email:dns|max:64|unique:users,email,$decrypted_id,id,deleted_at,NULL",
             'password' => 'required|max:128',
+            'foto' => 'mimes:png,jpeg,jpg|max:2048',
         ]);
         DB::beginTransaction();
         try {
             $user = User::findOrFail($decrypted_id);
             $user->name = $validated['name'];
             $user->email = $validated['email'];
-            if ($request->password_old) {
+            if ($request->password_old != $request->password) {
                 $user->password = bcrypt($validated['password']);
+            }
+            // upload file
+            if ($request->file()) {
+                $file = $request->file('foto');
+                $fileName = Carbon::now()->format('ymdhis') . '_' . Auth::user()->id . '_' . str::random(25) . '.' . $file->extension();
+                $user->foto = $fileName;
+                $file->move(public_path('files/foto'), $fileName);
+                // hapus file yg sebelumnya
+                if ($request->file_old) {
+                    $file_path = public_path() . '/files/foto/' . $request->file_old;
+                    unlink($file_path);
+                }
             }
             $user->save();
             DB::commit();

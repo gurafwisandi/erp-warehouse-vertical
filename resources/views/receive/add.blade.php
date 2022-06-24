@@ -24,17 +24,17 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 pb-1">Kode Receive</label>
+                                            <label class="my-2 pb-1">Kode Penerimaan</label>
                                             <input type="text" class="form-control" name="kode_receive" readonly
-                                                value="{{ $kode_receive }}" placeholder="Kode Receive" />
+                                                value="{{ $kode_receive }}" placeholder="Kode Penerimaan" />
                                             {!! $errors->first('kode_receive', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 pb-1">Tgl Receive</label>
+                                            <label class="my-2 pb-1">Tgl Penerimaan</label>
                                             <input type="date" class="form-control" name="tgl_receive" required
-                                                value="{{ old('tgl_receive') }}" placeholder="Tgl Receive" />
+                                                value="{{ old('tgl_receive') }}" placeholder="Tgl Penerimaan" />
                                             {!! $errors->first('tgl_receive', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
@@ -44,8 +44,7 @@
                                         <div class="form-group mb-0">
                                             <label class="my-2 py-1">Vendor</label>
                                             <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="id_vendor"
-                                                    required>
+                                                <select class=" form-control mb-3 custom-select" name="id_vendor" required>
                                                     <option value="">--Pilih Vendor--</option>
                                                     @foreach ($vendor as $item)
                                                         <option value="{{ $item->id }}">

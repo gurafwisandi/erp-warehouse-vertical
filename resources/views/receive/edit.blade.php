@@ -26,7 +26,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 pb-1">Kode Receive</label>
+                                            <label class="my-2 pb-1">Kode Penerimaan</label>
                                             <input type="text" class="form-control" name="kode_receive" readonly
                                                 value="{{ $item->kode_receive }}" placeholder="Kode Receive" />
                                             {!! $errors->first('kode_receive', '<div class="invalid-validasi">:message</div>') !!}
@@ -34,7 +34,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 pb-1">Tgl Receive</label>
+                                            <label class="my-2 pb-1">Tgl Penerimaan</label>
                                             <input type="date" class="form-control" name="tgl_receive"
                                                 value="{{ $item->tgl_receive }}" placeholder="Kode Receive" />
                                             {!! $errors->first('tgl_receive', '<div class="invalid-validasi">:message</div>') !!}
@@ -46,8 +46,7 @@
                                         <div class="form-group mb-0">
                                             <label class="my-2 py-1">Vendor</label>
                                             <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="id_vendor"
-                                                    required>
+                                                <select class=" form-control mb-3 custom-select" name="id_vendor" required>
                                                     <option value="">--Pilih Vendor--</option>
                                                     @foreach ($vendor as $vendor)
                                                         <option value="{{ $vendor->id }}"
@@ -107,21 +106,19 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Item</th>
-                                            <th>Type</th>
                                             <th>Qty</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($details as $items)
+                                        @foreach ($details as $dat)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $items->items->nama }}</td>
-                                                <td>{{ $items->type }}</td>
-                                                <td>{{ $items->qty }}</td>
+                                                <td>{{ $dat->items->nama . ' - ' . $dat->items->panjang . 'm' }}</td>
+                                                <td>{{ $dat->qty . ' ' . $dat->items->satuan }}</td>
                                                 <td>
                                                     <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
-                                                        <?php $id = Crypt::encryptString($items->id); ?>
+                                                        <?php $id = Crypt::encryptString($dat->id); ?>
                                                         <form class="delete-form"
                                                             action="{{ route('receive_detail.destroy', $id) }}"
                                                             method="POST">
@@ -164,32 +161,21 @@
                     <input type="hidden" name="id_receive" value="{{ $item->id }}">
                     <div class="modal-body">
                         <div class="form-group mb-0">
-                            <label class="my-2 py-1">Type</label>
+                            <label class="my-2 py-1">Item</label>
                             <div>
-                                <select class="select2 form-control mb-3 custom-select type" name="type" id="type" required>
+                                <select class=" form-control mb-3 custom-select type" name="id_item" required>
                                     <option value="">--Pilih Type--</option>
-                                    @foreach ($type as $type)
-                                        <option value="{{ $type }}">
-                                            {{ $type }}
+                                    @foreach ($items as $itm)
+                                        <option value="{{ $itm->id }}">
+                                            {{ $itm->nama . ' - ' . $itm->panjang . 'm' }}
                                         </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group mb-0">
-                            <label class="my-2 py-1">Item</label>
-                            <div>
-                                <select class="select2 form-control mb-3 custom-select item" name="item" required>
-                                    <option value="">--Pilih Item--</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group mb-0">
+                        <div class="form-group">
                             <label class="my-2 pb-1">Qty</label>
                             <input type="number" class="form-control" name="qty" placeholder="Qty" required />
-                        </div>
-                        <div class="form-group mb-0">
-                            <label class="my-2 py-1">&nbsp;</label>
                         </div>
                         <div class="form-group mb-0">
                             <button type="submit" class="btn btn-primary waves-effect waves-light">
@@ -207,31 +193,6 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/alert.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            $(".type").change(function() {
-                let type = $(this).val();
-                $(".item option").remove();
-                $.ajax({
-                    type: "POST",
-                    url: '{{ route('item.dropdown') }}',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        type
-                    },
-                    success: response => {
-                        $('.item').append(`<option value="">-- Pilih Item --</option>`)
-                        $.each(response, function(i, item) {
-                            $('.item').append(
-                                `<option value="${item.id}">${item.nama}</option>`
-                            )
-                        })
-                    },
-                    error: (err) => {
-                        console.log(err);
-                    },
-                });
-            });
-        });
         $('.delete_confirm').on('click', function(event) {
             event.preventDefault();
             Swal.fire({

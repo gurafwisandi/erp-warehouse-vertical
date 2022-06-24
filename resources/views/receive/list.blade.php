@@ -28,7 +28,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode Receive</th>
+                                        <th>Kode Penerimaan</th>
                                         <th>Tgl</th>
                                         <th>Keterangan</th>
                                         <th>Vendor</th>
@@ -47,12 +47,12 @@
                                             <td>{{ $item->vendors->nama }}</td>
                                             <td>{{ $item->users->name }}</td>
                                             <td>
-                                                @if ($item->status == 'Selesai Penerimaan')
+                                                @if ($item->status == 'Selesai')
                                                     <span class="badge badge-success">{{ $item->status }}</span>
-                                                @elseif($item->status == 'Proses Penerimaan')
+                                                @elseif($item->status == 'Proses Request')
                                                     <span class="badge badge-warning">{{ $item->status }}</span>
-                                                @elseif($item->status == 'Proses Penempatan')
-                                                    <span class="badge badge-info">{{ $item->status }}</span>
+                                                @elseif($item->status == 'Pembuatan Request')
+                                                    <span class="badge badge-secondary">{{ $item->status }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -68,7 +68,7 @@
                                                                 style="float: none; margin: 5px;">
                                                                 <span class="ti-eye"></span>
                                                             </a>
-                                                            @if ($item->status == 'Proses Penerimaan')
+                                                            @if ($item->status == 'Pembuatan Request')
                                                                 @if (Auth::user()->roles == 'Purchasing')
                                                                     <button type="button"
                                                                         class="tabledit-delete-button btn btn-sm btn-danger delete_confirm"
@@ -82,7 +82,7 @@
                                                                     </a>
                                                                 @endif
                                                             @endif
-                                                            @if ($item->status == 'Proses Penempatan' and Auth::user()->roles == 'Gudang')
+                                                            @if ($item->status == 'Proses Request' and Auth::user()->roles == 'Gudang')
                                                                 <a href="{{ route('receive.penempatan', $id) }}"
                                                                     class="tabledit-edit-button btn btn-sm btn-secondary"
                                                                     style="float: none; margin: 5px;">

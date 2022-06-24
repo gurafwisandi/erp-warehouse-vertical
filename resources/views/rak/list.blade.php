@@ -29,7 +29,9 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No Rak</th>
+                                        <th>Lokasi</th>
                                         <th>Keterangan</th>
+                                        <th>Item</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -38,7 +40,9 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->no_rak }}</td>
+                                            <td>{{ $item->lokasi }}</td>
                                             <td>{{ $item->keterangan }}</td>
+                                            <td>{{ $item->items->nama . ' - ' . $item->items->panjang . 'm' }}</td>
                                             <td>
                                                 <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                                     <div class="btn-group btn-group-sm" style="float: none;">

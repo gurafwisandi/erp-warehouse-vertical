@@ -34,23 +34,27 @@
                                     {!! $errors->first('file', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
-                                    <label class="my-2 py-1">Type</label>
-                                    <div>
-                                        <select class="select2 form-control mb-3 custom-select" name="type" required>
-                                            <option value="">--Pilih Type--</option>
-                                            @foreach ($type as $type)
-                                                <option value="{{ $type }}">
-                                                    {{ $type }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    {!! $errors->first('type', '<div class="invalid-validasi">:message</div>') !!}
+                                    <label class="my-2 pb-1">Panjang (m)</label>
+                                    <input type="number" class="form-control" name="panjang" required
+                                        value="{{ old('panjang') }}" placeholder="Panjang" />
+                                    {!! $errors->first('panjang', '<div class="invalid-validasi">:message</div>') !!}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="my-2 pb-1">Diameter (mm)</label>
+                                    <input type="text" class="form-control" name="diameter" required
+                                        value="{{ old('diameter') }}" placeholder="Diameter" />
+                                    {!! $errors->first('diameter', '<div class="invalid-validasi">:message</div>') !!}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="my-2 pb-1">Berat (kg)</label>
+                                    <input type="number" step="0.01" min="0" class="form-control" name="berat"
+                                        required value="{{ old('berat') }}" placeholder="Berat" />
+                                    {!! $errors->first('berat', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">Satuan</label>
                                     <div>
-                                        <select class="select2 form-control mb-3 custom-select" name="satuan" required>
+                                        <select class="form-control mb-3 custom-select" name="satuan" required>
                                             <option value="">--Pilih Satuan--</option>
                                             @foreach ($satuan as $satuan)
                                                 <option value="{{ $satuan }}">
@@ -62,21 +66,6 @@
                                     {!! $errors->first('satuan', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
-                                    <label class="my-2 py-1">Bentuk Barang</label>
-                                    <div>
-                                        <select class="select2 form-control mb-3 custom-select" name="bentuk_barang"
-                                            required>
-                                            <option value="">--Pilih Bentuk Barang--</option>
-                                            @foreach ($bentuk as $bentuk)
-                                                <option value="{{ $bentuk }}">
-                                                    {{ $bentuk }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    {!! $errors->first('bentuk_barang', '<div class="invalid-validasi">:message</div>') !!}
-                                </div>
-                                <div class="form-group mb-0">
                                     <label class="my-2 py-1">Keterangan</label>
                                     <div>
                                         <textarea required name="keterangan" class="form-control" rows="5" placeholder="Keterangan">{{ old('keterangan') }}</textarea>
@@ -86,7 +75,7 @@
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">Vendor</label>
                                     <div>
-                                        <select class="select2 form-control mb-3 custom-select" name="id_vendor" required>
+                                        <select class="form-control mb-3 custom-select" name="id_vendor" required>
                                             <option value="">--Pilih Vendor--</option>
                                             @foreach ($vendor as $item)
                                                 <option value="{{ $item->id }}">

@@ -42,4 +42,13 @@ class AlertHelper
             Alert::error('Gagal', 'Qty berlebihan');
         }
     }
+
+    public static function addDuplicate($info)
+    {
+        if ($info) {
+            Alert::success('Berhasil', 'Berhasil disimpan');
+        } else {
+            Alert::error('Gagal', 'Item sudah ada');
+        }
+    }
 }

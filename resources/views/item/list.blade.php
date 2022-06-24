@@ -30,7 +30,9 @@
                                         <th>No</th>
                                         <th class="text-center">Gambar</th>
                                         <th>Nama</th>
-                                        <th>Type</th>
+                                        <th>Panjang</th>
+                                        <th>Diameter</th>
+                                        <th>Berat</th>
                                         <th class="text-center">Qty</th>
                                         <th>Keterangan</th>
                                         <th>Aksi</th>
@@ -44,7 +46,9 @@
                                                     src="{{ URL::asset('files/item/' . $item->gambar) }}"
                                                     style="width: 150px;height:150px;" class="rounded-circle"></td>
                                             <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->type }}</td>
+                                            <td>{{ $item->panjang }}</td>
+                                            <td>{{ $item->diameter }}</td>
+                                            <td>{{ $item->berat }}</td>
                                             <td class="text-center">{{ $item->qty }}
                                                 {{ $item->qty ? $item->satuan : '' }}</td>
                                             <td>{{ $item->keterangan }}</td>

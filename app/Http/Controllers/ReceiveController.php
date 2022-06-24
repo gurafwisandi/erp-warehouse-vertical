@@ -46,10 +46,10 @@ class ReceiveController extends Controller
         $now = Carbon::now();
         $month_and_year = $now->format('ymd');
         if (!$registration_number) {
-            $generate_registration_number = "REC" . $month_and_year . sprintf('%04d', 1);
+            $generate_registration_number = "TRM" . $month_and_year . sprintf('%04d', 1);
         } else {
             $last_number = (int)substr($registration_number, 9);
-            $generate_registration_number = "REC" . $month_and_year . sprintf('%04d', $last_number + 1);
+            $generate_registration_number = "TRM" . $month_and_year . sprintf('%04d', $last_number + 1);
         }
         $data = [
             'menu' => $this->menu,
@@ -80,7 +80,7 @@ class ReceiveController extends Controller
             $receive->kode_receive = $request->kode_receive;
             $receive->tgl_receive = $request->tgl_receive;
             $receive->keterangan = $request->keterangan;
-            $receive->status = 'Proses Penerimaan';
+            $receive->status = 'Pembuatan Request';
             $receive->id_vendor = $request->id_vendor;
             $receive->id_user = Auth::user()->id;
             $receive->save();
@@ -106,13 +106,11 @@ class ReceiveController extends Controller
     {
         $data = [
             'menu' => $this->menu,
-            'title' => 'view',
+            'title' => 'penempatan',
             'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'item' => ReceiveModel::findorfail(Crypt::decryptString($id)),
-            'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->orderby('type', 'ASC')->get(),
-            'types' => ReceiveDetailModel::select('type')->where('id_receive', Crypt::decryptString($id))->groupby('type')->get(),
-            'invens' => InventoryModel::where('id_receive', Crypt::decryptString($id))->orderby('kode_item', 'DESC')->get(),
-            'raks' => RakModel::all(),
+            'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->get(),
+            'invens' => InventoryModel::where('id_receive', Crypt::decryptString($id))->get(),
         ];
         return view('receive.view')->with($data);
     }
@@ -131,7 +129,7 @@ class ReceiveController extends Controller
             'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'item' => ReceiveModel::findorfail(Crypt::decryptString($id)),
             'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->get(),
-            'type' => ['Chemical', 'Alat'],
+            'items' => ItemModel::all(),
         ];
         return view('receive.edit')->with($data);
     }
@@ -202,7 +200,7 @@ class ReceiveController extends Controller
         DB::beginTransaction();
         try {
             $receive = ReceiveModel::findOrFail(Crypt::decryptString($id));
-            $receive->status = 'Proses Penempatan';
+            $receive->status = 'Proses Request';
             $receive->save();
             DB::commit();
             AlertHelper::addAlert(true);
@@ -222,10 +220,8 @@ class ReceiveController extends Controller
             'title' => 'penempatan',
             'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'item' => ReceiveModel::findorfail(Crypt::decryptString($id)),
-            'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->orderby('type', 'ASC')->get(),
-            'types' => ReceiveDetailModel::select('type')->where('id_receive', Crypt::decryptString($id))->groupby('type')->get(),
-            'invens' => InventoryModel::where('id_receive', Crypt::decryptString($id))->orderby('kode_item', 'DESC')->get(),
-            'raks' => RakModel::all(),
+            'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->get(),
+            'invens' => InventoryModel::where('id_receive', Crypt::decryptString($id))->get(),
         ];
         return view('receive.receive')->with($data);
     }
@@ -236,15 +232,14 @@ class ReceiveController extends Controller
         try {
             // update status receive
             $receive = ReceiveModel::findOrFail(Crypt::decryptString($id));
-            $receive->status = 'Selesai Penerimaan';
+            $receive->status = 'Selesai';
             $receive->save();
-            // update status IN
-            InventoryModel::where('id_receive', Crypt::decryptString($id))->update(['status' => 'IN']);
-            // cek stock
-            $stock = InventoryModel::where('id_receive', Crypt::decryptString($id))->groupby('id_item')->get();
-            for ($i = 0; $i < count($stock); $i++) {
-                $hasil_qty = InventoryModel::where('id_item', $stock[$i]->id_item)->where('status', 'IN')->sum('qty');
-                ItemModel::where('id', $stock[$i]->id_item)->update(['qty' => $hasil_qty]);
+
+            // update qty yg sudah diterima
+            $detail = ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->get();
+            foreach ($detail as $item) {
+                $qty = InventoryModel::where('id_receive', $item->id_receive)->where('id_item', $item->id_item)->sum('qty');
+                ItemModel::where('id', $item->id_item)->update(['qty' => $qty]);
             }
             DB::commit();
             AlertHelper::addAlert(true);

@@ -46,8 +46,7 @@
                                         <div class="form-group mb-0">
                                             <label class="my-2 py-1">Vendor</label>
                                             <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="id_vendor"
-                                                    disabled>
+                                                <select class=" form-control mb-3 custom-select" name="id_vendor" disabled>
                                                     <option value="">--Pilih Vendor--</option>
                                                     @foreach ($vendor as $vendor)
                                                         <option value="{{ $vendor->id }}"
@@ -78,18 +77,23 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Type</th>
                                                 <th>Item</th>
                                                 <th>Qty</th>
+                                                <th>Qty yang diterima</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach ($details as $detail)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $detail->type }}</td>
-                                                    <td>{{ $detail->items->nama }}</td>
-                                                    <td>{{ $detail->qty }}</td>
+                                                    <td>{{ $detail->items->nama . ' - ' . $detail->items->panjang . 'm' }}
+                                                    </td>
+                                                    <td>{{ $detail->qty . ' ' . $detail->items->satuan }}</td>
+                                                    <td>{{ $detail->qty_terima }}
+                                                        @if ($detail->qty_terima)
+                                                            {{ $detail->items->satuan }}
+                                                        @endif
+                                                    </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -118,7 +122,6 @@
                                                     class="tabledit-delete-button btn btn-sm btn-success approve_confirm"
                                                     style="float: none; margin: 5px;">
                                                     <span class="ti-check"></span> Approve
-                                                    {{-- approve rubah status receive dan status inventory --}}
                                                 </button>
                                             </form>
                                         @endif
@@ -132,11 +135,10 @@
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Type</th>
-                                                <th>Kode Item</th>
                                                 <th>Item</th>
                                                 <th>Rak</th>
                                                 <th>Qty</th>
+                                                <th>Tgl Masuk Gudang</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -144,11 +146,11 @@
                                             @foreach ($invens as $inven)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $inven->items->type }}</td>
-                                                    <td>{{ $inven->kode_item }}</td>
-                                                    <td>{{ $inven->items->nama }}</td>
-                                                    <td>{{ $inven->raks->no_rak }}</td>
-                                                    <td>{{ $inven->qty }}</td>
+                                                    <td>{{ $inven->items->nama . ' - ' . $inven->items->panjang . 'm' }}
+                                                    </td>
+                                                    <td>{{ $inven->raks->no_rak . ' - ' . $inven->raks->lokasi }}</td>
+                                                    <td>{{ $inven->qty . ' ' . $inven->items->satuan }}</td>
+                                                    <td>{{ $inven->tgl_masuk_gudang }}</td>
                                                     <td>
                                                         <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                                             <?php $id = Crypt::encryptString($inven->id); ?>
@@ -194,55 +196,35 @@
                     <input type="hidden" name="id_receive" id="idReceive" value="{{ $item->id }}">
                     <div class="modal-body">
                         <div class="form-group mb-0">
-                            <label class="my-2 py-1">Type</label>
-                            <div>
-                                <select class="select2 form-control mb-3 custom-select type" name="type" id="type" required>
-                                    <option value="">--Pilih Type--</option>
-                                    @foreach ($types as $type)
-                                        <option value="{{ $type->type }}">
-                                            {{ $type->type }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group mb-0">
                             <label class="my-2 py-1">Item</label>
                             <div>
-                                <select class="select2 form-control mb-3 custom-select item" name="item" id="item" required>
+                                <select class=" form-control mb-3 custom-select item" name="item" id="item"
+                                    required>
                                     <option value="">--Pilih Item--</option>
+                                    @foreach ($details as $itm)
+                                        <option value="{{ $itm->id_item }}">
+                                            {{ $itm->items->nama . ' - ' . $itm->items->panjang . 'm' }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="form-group mb-0">
                             <label class="my-2 py-1">Rak</label>
                             <div>
-                                <select class="select2 form-control mb-3 custom-select rak" name="rak" required>
+                                <select class=" form-control mb-3 custom-select rak" name="rak" required>
                                     <option value="">--Pilih Rak--</option>
-                                    @foreach ($raks as $rak)
-                                        <option value="{{ $rak->id }}">
-                                            {{ $rak->no_rak }}
-                                        </option>
-                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="form-group mb-0">
                             <label class="my-2 pb-1">Tgl Masuk Gudang</label>
-                            <input type="date" class="form-control" name="tgl_masuk_gudang" placeholder="Tgl Masuk Gudang"
-                                required />
+                            <input type="date" class="form-control" name="tgl_masuk_gudang"
+                                placeholder="Tgl Masuk Gudang" required />
                         </div>
-                        <div class="form-group mb-0">
-                            <label class="my-2 pb-1">Tgl Expired</label>
-                            <input type="date" class="form-control" name="tgl_expired" placeholder="Tgl Expired"
-                                required />
-                        </div>
-                        <div class="form-group mb-0">
+                        <div class="form-group">
                             <label class="my-2 pb-1">Qty</label>
                             <input type="number" class="form-control" name="qty" placeholder="Qty" required />
-                        </div>
-                        <div class="form-group mb-0">
-                            <label class="my-2 py-1">&nbsp;</label>
                         </div>
                         <div class="form-group mb-0">
                             <button type="submit" class="btn btn-primary waves-effect waves-light">
@@ -261,23 +243,22 @@
     <script src="{{ asset('assets/alert.js') }}"></script>
     <script>
         $(document).ready(function() {
-            $(".type").change(function() {
-                let type = $(this).val();
-                let idReceive = document.getElementById("idReceive").value;
-                $(".item option").remove();
+            $(".item").change(function() {
+                let item = $(this).val();
+                $(".rak option").remove();
                 $.ajax({
                     type: "POST",
                     url: '{{ route('item.dropdown_receive') }}',
                     data: {
                         "_token": "{{ csrf_token() }}",
-                        type,
-                        idReceive
+                        item,
                     },
                     success: response => {
-                        $('.item').append(`<option value="">-- Pilih Item --</option>`)
+                        console.log(response)
+                        $('.rak').append(`<option value="">-- Pilih Rak --</option>`)
                         $.each(response, function(i, item) {
-                            $('.item').append(
-                                `<option value="${item.id +'|'+ item.id_receive_detail +'|'+ item.qty}">${item.nama}</option>`
+                            $('.rak').append(
+                                `<option value="${item.id}">${item.no_rak+' - '+item.lokasi+' = stock ['+item.qty_stok+']'}</option>`
                             )
                         })
                     },

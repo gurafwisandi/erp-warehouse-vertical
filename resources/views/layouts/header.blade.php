@@ -4,14 +4,15 @@
             {{-- <a href="index.html" class="logo">
                 <img src="assets/images/logo.png" alt="" class="logo-large">
             </a> --}}
-            PT.
+            PT. - <span class="badge badge-success">{{ Auth::user()->roles }}</span>
         </div>
         <div class="menu-extras topbar-custom">
             <ul class="list-inline float-right mb-0">
                 <li class="list-inline-item dropdown notification-list">
                     <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown"
                         href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="assets/images/users/avatar-1.jpg" alt="user" class="rounded-circle">
+                        <img src="{{ URL::asset('files/foto/' . Auth::user()->foto) }}" alt="user"
+                            class="rounded-circle">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                         <div class="dropdown-item noti-title">

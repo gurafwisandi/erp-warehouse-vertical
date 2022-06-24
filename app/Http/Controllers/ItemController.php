@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\AlertHelper;
 use App\Models\InventoryModel;
 use App\Models\ItemModel;
+use App\Models\RakModel;
 use App\Models\SupplierModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -45,9 +46,7 @@ class ItemController extends Controller
             'menu' => $this->menu,
             'title' => 'add',
             'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
-            'type' => ['Chemical', 'Alat'],
-            'satuan' => ['Pasang', 'Unit', 'Pcs', 'Stell', 'Liter', 'Tube', 'Gram', 'KG'],
-            'bentuk' => ['Cair', 'Padat', 'Padat Pasir', 'Padat Bubuk'],
+            'satuan' => ['Pasang', 'Unit', 'Pcs'],
         ];
         return view('item.add')->with($data);
     }
@@ -62,21 +61,22 @@ class ItemController extends Controller
     {
         $request->validate([
             'nama' => 'required|max:64',
-            'type' => 'required|max:64',
+            'diameter' => 'required|max:64',
             'file' => 'required|image',
             'satuan' => 'required|max:64',
-            'bentuk_barang' => 'required|max:64',
+            'panjang' => 'required|max:64',
+            'berat' => 'required|max:64',
             'keterangan' => 'required|max:128',
             'id_vendor' => 'required|max:64',
         ]);
         DB::beginTransaction();
         try {
-
             $item = new ItemModel();
             $item->nama = $request->nama;
-            $item->type = $request->type;
             $item->satuan = $request->satuan;
-            $item->bentuk_barang = $request->bentuk_barang;
+            $item->diameter = $request->diameter;
+            $item->panjang = $request->panjang;
+            $item->berat = $request->berat;
             $item->keterangan = $request->keterangan;
             if ($request->file()) {
                 $fileName = Carbon::now()->format('ymdhis') . '_' .  str::random(25) . '.' . $request->file->extension();
@@ -111,9 +111,7 @@ class ItemController extends Controller
             'title' => 'view',
             'item' => ItemModel::findorfail(Crypt::decryptString($id)),
             'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
-            'type' => ['Chemical', 'Alat'],
-            'satuan' => ['Pasang', 'Unit', 'Pcs', 'Stell', 'Liter', 'Tube', 'Gram', 'KG'],
-            'bentuk' => ['Cair', 'Padat', 'Padat Pasir', 'Padat Bubuk'],
+            'satuan' => ['Pasang', 'Unit', 'Pcs'],
         ];
         return view('item.view')->with($data);
     }
@@ -131,9 +129,7 @@ class ItemController extends Controller
             'title' => 'edit',
             'item' => ItemModel::findorfail(Crypt::decryptString($id)),
             'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
-            'type' => ['Chemical', 'Alat'],
-            'satuan' => ['Pasang', 'Unit', 'Pcs', 'Stell', 'Liter', 'Tube', 'Gram', 'KG'],
-            'bentuk' => ['Cair', 'Padat', 'Padat Pasir', 'Padat Bubuk'],
+            'satuan' => ['Pasang', 'Unit', 'Pcs'],
         ];
         return view('item.edit')->with($data);
     }
@@ -150,10 +146,11 @@ class ItemController extends Controller
         $decrypted_id = Crypt::decryptString($id);
         $request->validate([
             'nama' => 'required|max:64',
-            'type' => 'required|max:64',
+            'diameter' => 'required|max:64',
             'satuan' => 'required|max:64',
             'file' => 'image',
-            'bentuk_barang' => 'required|max:64',
+            'panjang' => 'required|max:64',
+            'berat' => 'required|max:64',
             'keterangan' => 'required|max:128',
             'id_vendor' => 'required|max:64',
         ]);
@@ -161,9 +158,10 @@ class ItemController extends Controller
         try {
             $item = ItemModel::findOrFail($decrypted_id);
             $item->nama = $request->nama;
-            $item->type = $request->type;
+            $item->diameter = $request->diameter;
             $item->satuan = $request->satuan;
-            $item->bentuk_barang = $request->bentuk_barang;
+            $item->panjang = $request->panjang;
+            $item->berat = $request->berat;
             $item->keterangan = $request->keterangan;
             if ($request->file()) {
                 $fileName = Carbon::now()->format('ymdhis') . '_' .  str::random(25) . '.' . $request->file->extension();
@@ -220,19 +218,51 @@ class ItemController extends Controller
 
     public function dropdown_receive(Request $request)
     {
-        $item = DB::table('receive')
-            ->select('item.*', 'receive_detail.id as id_receive_detail')
-            ->selectRaw('sum(receive_detail.qty) as qty')
-            ->join('receive_detail', 'receive_detail.id_receive', '=', 'receive.id')
-            ->join('item', 'item.id', '=', 'receive_detail.id_item')
-            ->where('receive.id', '=', $request->idReceive)
-            ->where('receive_detail.type', '=', $request->type)
-            ->wherenull('receive_detail.deleted_at')
-            ->groupBy('receive_detail.type')
-            ->orderBy('item.nama', 'ASC')
+        // $item = RakModel::where('id_item', $request->item)->get();
+        $item = DB::table('rak')
+            ->select('rak.*', 'item.qty as qty_stok')
+            ->join('item', 'item.id', '=', 'rak.id_item')
+            ->where('rak.id_item', '=', $request->item)
+            ->orderBy('rak.no_rak', 'ASC')
             ->get();
         return $item;
     }
+
+    public function stock($id)
+    {
+        $item = InventoryModel::where('id_item', Crypt::decryptString($id))->orderBy('id', 'ASC')->get();
+        $data = [
+            'menu' => $this->menu,
+            'title' => 'stock',
+            'list' => $item,
+        ];
+        return view('item.stock')->with($data);
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function dropdown_rak(Request $request)
     {
@@ -248,16 +278,5 @@ class ItemController extends Controller
             ->orderBy('rak.id', 'ASC')
             ->get();
         return $item;
-    }
-
-    public function stock($id)
-    {
-        $item = InventoryModel::where('id_item', Crypt::decryptString($id))->orderBy('id', 'ASC')->get();
-        $data = [
-            'menu' => $this->menu,
-            'title' => 'stock',
-            'list' => $item,
-        ];
-        return view('item.stock')->with($data);
     }
 }

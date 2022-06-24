@@ -23,15 +23,24 @@
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label class="my-2 pb-1">Nama Rak</label>
-                                        <input type="text" class="form-control"
-                                            value="{{ $list[0]->raks->no_rak . ' [' . $list[0]->raks->keterangan . ']' }}"
-                                            disabled />
+                                        @if (count($list))
+                                            <?php
+                                            $qty = $list[0]->raks->no_rak . ' [' . $list[0]->raks->keterangan . ']';
+                                            $count = count($list);
+                                            ?>
+                                        @else
+                                            <?php
+                                            $qty = '-';
+                                            $count = '-';
+                                            ?>
+                                        @endif
+                                        <input type="text" class="form-control" value="{{ $qty }}" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label class="my-2 pb-1">Qty</label>
-                                        <input type="text" class="form-control" value="{{ count($list) }}" disabled />
+                                        <input type="text" class="form-control" value="{{ $count }}" disabled />
                                     </div>
                                 </div>
                             </div>
@@ -40,30 +49,22 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode Item</th>
-                                        <th>Nama</th>
-                                        <th>Type</th>
+                                        <th>Kode Penerimaan</th>
                                         <th>Tgl Masuk Gudang</th>
-                                        <th>Tgl Expired</th>
-                                        <th>Status</th>
+                                        <th>Nama</th>
+                                        <th>Panajang</th>
+                                        <th>Qty</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($list as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->kode_item }}</td>
-                                            <td>{{ $item->items->nama }}</td>
-                                            <td>{{ $item->items->type }}</td>
+                                            <td>{{ $item->receive->kode_receive }}</td>
                                             <td>{{ $item->tgl_masuk_gudang }}</td>
-                                            <td>{{ $item->tgl_expired }}</td>
-                                            <td>
-                                                @if ($item->status == 'IN')
-                                                    <span class="badge badge-success">{{ $item->status }}</span>
-                                                @elseif($item->status == 'OUT')
-                                                    <span class="badge badge-warning">{{ $item->status }}</span>
-                                                @endif
-                                            </td>
+                                            <td>{{ $item->items->nama }}</td>
+                                            <td>{{ $item->items->panjang . 'm' }}</td>
+                                            <td>{{ $item->qty . ' ' . $item->items->satuan }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -71,7 +72,7 @@
                             <div class="form-group mb-0">
                                 <div>
                                     <a class="btn btn-secondary waves-effect m-l-5"
-                                        href="{{ route('item.index') }}">Kembali</a>
+                                        href="{{ route('rak.index') }}">Kembali</a>
                                 </div>
                             </div>
                         </div>

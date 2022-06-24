@@ -22,6 +22,7 @@
     <link href="{{ URL::asset('assets/css/style.css') }}" rel="stylesheet" type="text/css">
     {{-- helper harus ada script alert.js dan include('sweetalert::alert') --}}
     <script src="{{ asset('assets/alert.js') }}"></script>
+    <link href="{{ URL::asset('assets/form.css') }}" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -46,6 +47,7 @@
 
     <div class="wrapper">
         <div class="container-fluid">
+            <br>
             @yield('container')
         </div>
     </div>

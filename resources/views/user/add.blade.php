@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <form action="{{ route('user.store') }}" method="POST">
+                            <form action="{{ route('user.store') }}" enctype="multipart/form-data" method="POST">
                                 @csrf
                                 <div class="form-group mb-0">
                                     <label class="my-2 pb-1">Nama</label>
@@ -46,7 +46,7 @@
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">Roles</label>
                                     <div>
-                                        <select class="select2 form-control mb-3 custom-select" name="roles" required>
+                                        <select class=" form-control custom-select" name="roles" required>
                                             <option value="">--Pilih Roles--</option>
                                             <option value="Purchasing">Purchasing</option>
                                             <option value="Sales">Sales</option>
@@ -54,6 +54,11 @@
                                         </select>
                                     </div>
                                     {!! $errors->first('roles', '<div class="invalid-validasi">:message</div>') !!}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="my-2 pb-1">Foto</label>
+                                    <input type="file" class="form-control" name="foto">
+                                    {!! $errors->first('foto', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">&nbsp;</label>

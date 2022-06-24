@@ -27,12 +27,32 @@
                                         value="{{ old('no_rak') }}" placeholder="No Rak" />
                                     {!! $errors->first('no_rak', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group mb-0">
+                                    <label class="my-2 pb-1">Lokasi</label>
+                                    <input type="text" class="form-control" name="lokasi" required
+                                        value="{{ old('lokasi') }}" placeholder="Lokasi" />
+                                    {!! $errors->first('lokasi', '<div class="invalid-validasi">:message</div>') !!}
+                                </div>
+                                <div class="form-group mb-0">
                                     <label class="my-2 py-1">Keterangan</label>
                                     <div>
                                         <textarea required name="keterangan" class="form-control" rows="5" placeholder="Keterangan">{{ old('keterangan') }}</textarea>
                                         {!! $errors->first('keterangan', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="my-2 py-1">Item</label>
+                                    <div>
+                                        <select class="form-control mb-3 custom-select" name="id_item" required>
+                                            <option value="">--Pilih Item--</option>
+                                            @foreach ($items as $item_ite)
+                                                <option value="{{ $item_ite->id }}">
+                                                    {{ $item_ite->nama . ' - ' . $item_ite->panjang . 'm' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    {!! $errors->first('id_item', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
                                     <div>

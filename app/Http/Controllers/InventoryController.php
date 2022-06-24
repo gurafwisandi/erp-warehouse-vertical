@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\InventoryModel;
+use App\Models\ReceiveDetailModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
@@ -41,79 +42,43 @@ class InventoryController extends Controller
     {
         $request->validate([
             'id_receive' => 'required',
-            'type' => 'required',
             'item' => 'required',
             'rak' => 'required',
-            'tgl_expired' => 'required',
             'tgl_masuk_gudang' => 'required',
             'qty' => 'required',
         ]);
         DB::beginTransaction();
         try {
-            if ($request->type == 'Alat') {
-                for ($i = 0; $i < $request->qty; $i++) {
-                    // explode data item
-                    $item = explode("|", $request->item);
-                    $id_item = $item[0]; // item.id
-                    $id_receive_detail = $item[1]; // receive_detail.id as id_receive_detail
-                    $sum_qty = $item[2]; // sum(receive_detail.qty)
-                    // cek stock dan penerimaan
-                    $stock = InventoryModel::where('id_receive', $request->id_receive)->where('id_item', $id_item)->sum('qty');
-                    if ($stock >= $sum_qty) {
-                        AlertHelper::addStock(false);
-                        return back();
-                    }
-                    // kode item
-                    $registration_number = InventoryModel::wherenotnull('kode_item')->pluck('kode_item')->last();
-                    $now = Carbon::now();
-                    $month_and_year = $now->format('ymd');
-                    if (!$registration_number) {
-                        $generate_registration_number = "ITM" . $month_and_year . sprintf('%04d', 1);
-                    } else {
-                        $last_number = (int)substr($registration_number, 9);
-                        $generate_registration_number = "ITM" . $month_and_year . sprintf('%04d', $last_number + 1);
-                    }
-                    // insert inventory
-                    $inven = new InventoryModel();
-                    $inven->kode_item = $generate_registration_number;
-                    $inven->tgl_masuk_gudang = $request->tgl_masuk_gudang;
-                    $inven->tgl_expired = $request->tgl_expired;
-                    $inven->qty = '1';
-                    $inven->id_rak = $request->rak;
-                    $inven->id_item = $id_item;
-                    $inven->id_receive = $request->id_receive;
-                    $inven->id_receive_detail = $id_receive_detail;
-                    $inven->save();
-                }
-            } else {
-                for ($i = 0; $i < $request->qty; $i++) {
-                    $item = explode("|", $request->item);
-                    $id_item = $item[0]; // item.id
-                    $id_receive_detail = $item[1]; // receive_detail.id as id_receive_detail
-                    $sum_qty = $item[2]; // sum(receive_detail.qty)
-                    // cek stock dan penerimaan
-                    $stock = InventoryModel::where('id_receive', $request->id_receive)->where('id_item', $id_item)->sum('qty');
-                    // dd(floatval($sum_qty));
-                    if (floatval($stock) >= floatval($sum_qty)) {
-                        AlertHelper::addStock(false);
-                        return back();
-                    }
-                    if (floatval($request->qty) > floatval($sum_qty)) {
-                        AlertHelper::addStock(false);
-                        return back();
-                    }
-                    // insert inventory
-                    $inven = new InventoryModel();
-                    $inven->tgl_masuk_gudang = $request->tgl_masuk_gudang;
-                    $inven->tgl_expired = $request->tgl_expired;
-                    $inven->qty = '1';
-                    $inven->id_rak = $request->rak;
-                    $inven->id_item = $id_item;
-                    $inven->id_receive = $request->id_receive;
-                    $inven->id_receive_detail = $id_receive_detail;
-                    $inven->save();
-                }
+            // TODO : cek validasi
+            // cari id detail receive
+            $id_receive_detail = ReceiveDetailModel::where('id_receive', $request->id_receive)->where('id_item', $request->item)->first();
+            if ($id_receive_detail->qty_terima >= $id_receive_detail->qty) {
+                AlertHelper::addStock(false);
+                return back();
             }
+            if ($request->qty > $id_receive_detail->qty) {
+                AlertHelper::addStock(false);
+                return back();
+            }
+            if (($request->qty + $id_receive_detail->qty_terima) > $id_receive_detail->qty) {
+                AlertHelper::addStock(false);
+                return back();
+            }
+            // insert inventory
+            $inven = new InventoryModel();
+            $inven->tgl_masuk_gudang = $request->tgl_masuk_gudang;
+            $inven->qty = $request->qty;
+            $inven->id_rak = $request->rak;
+            $inven->id_item = $request->item;
+            $inven->id_receive = $request->id_receive;
+            $inven->id_receive_detail = $id_receive_detail->id;
+            $inven->save();
+            // cek item yg sudah di terima
+            $jml_qty = InventoryModel::where('id_receive', $request->id_receive)->where('id_item', $request->item)->sum('qty');
+            // update qty yg sudah diterima
+            $receive = ReceiveDetailModel::findOrFail($id_receive_detail->id);
+            $receive->qty_terima = $jml_qty;
+            $receive->save();
             $insertedId = Crypt::encryptString($request->id_receive);
             DB::commit();
             AlertHelper::addAlert(true);
@@ -171,7 +136,18 @@ class InventoryController extends Controller
         DB::beginTransaction();
         try {
             $receive = InventoryModel::findOrFail(Crypt::decryptString($id));
+            $id_receive = $receive->id_receive;
+            $id_item = $receive->id_item;
+            $id_receive_detail = $receive->id_receive_detail;
             $receive->delete();
+
+            // cek item yg sudah di terima
+            $jml_qty = InventoryModel::where('id_receive', $id_receive)->where('id_item', $id_item)->sum('qty');
+            // update qty yg sudah diterima
+            $detail = ReceiveDetailModel::findOrFail($id_receive_detail);
+            $detail->qty_terima = $jml_qty;
+            $detail->save();
+
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();

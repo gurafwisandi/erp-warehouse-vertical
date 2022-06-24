@@ -20,7 +20,7 @@
                     <div class="card">
                         <div class="card-body">
                             <form action="{{ route('user.update_profile', Crypt::encryptString($item->id)) }}"
-                                method="POST">
+                                enctype="multipart/form-data" method="POST">
                                 @csrf
                                 @method('PATCH')
                                 <div class="form-group mb-0">
@@ -46,6 +46,22 @@
                                             placeholder="Password" />
                                         {!! $errors->first('password', '<div class="invalid-validasi">:message</div>') !!}
                                     </div>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="my-2 pb-1">Roles</label>
+                                    <input type="text" class="form-control" name="roles" readonly
+                                        value="{{ $item->roles }}" placeholder="Roles" />
+                                    {!! $errors->first('roles', '<div class="invalid-validasi">:message</div>') !!}
+                                </div>
+                                <div class="form-group mb-0">
+                                    <label class="my-2 pb-1">Foto</label>
+                                    <input type="file" class="form-control" name="foto" placeholder="Foto" />
+                                    <input type="hidden" name="file_old" value="{{ $item->foto }}">
+                                    <?php if($item->foto){ ?>
+                                    <img src="{{ asset('files/foto/' . $item->foto) }}" alt="" width="300"
+                                        class="rounded avatar-md">
+                                    <?php } ?>
+                                    {!! $errors->first('foto', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">&nbsp;</label>

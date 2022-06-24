@@ -24,7 +24,7 @@
             <div class="card-body">
                 <div class="text-center">
                     <a href="#" class="logo logo-admin"><img src="{{ URL::asset('assets/images/logo.png') }}"
-                            height="100" alt="logo"></a>
+                            height="100" width="300" alt="logo"></a>
                 </div>
                 @if (count($errors) > 0)
                     <div class="px-2">

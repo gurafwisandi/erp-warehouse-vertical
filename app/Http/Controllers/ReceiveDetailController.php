@@ -40,16 +40,19 @@ class ReceiveDetailController extends Controller
     {
         $request->validate([
             'id_receive' => 'required',
-            'item' => 'required',
+            'id_item' => 'required',
             'qty' => 'required',
-            'type' => 'required',
         ]);
         DB::beginTransaction();
         try {
+            $cek_item = ReceiveDetailModel::where('id_receive', $request->id_receive)->where('id_item', $request->id_item)->get();
+            if (count($cek_item) > 0) {
+                AlertHelper::addDuplicate(false);
+                return back();
+            }
             $receive = new ReceiveDetailModel();
             $receive->id_receive = $request->id_receive;
-            $receive->id_item = $request->item;
-            $receive->type = $request->type;
+            $receive->id_item = $request->id_item;
             $receive->qty = $request->qty;
             $receive->save();
             $insertedId = Crypt::encryptString($request->id_receive);
