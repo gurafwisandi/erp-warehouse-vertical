@@ -4,7 +4,7 @@
             {{-- <a href="index.html" class="logo">
                 <img src="assets/images/logo.png" alt="" class="logo-large">
             </a> --}}
-            PT. - <span class="badge badge-success">{{ Auth::user()->roles }}</span>
+            PT. LAUTAN STEEL INDONESIA - <span class="badge badge-success">{{ Auth::user()->roles }}</span>
         </div>
         <div class="menu-extras topbar-custom">
             <ul class="list-inline float-right mb-0">

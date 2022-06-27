@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <title>Provice Group - Integrated Property Services</title>
+    <title>PT. LAUTAN STEEL INDONESIA</title>
     <meta content="Admin Dashboard" name="description" />
     <meta content="Mannatthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="{{ URL::asset('assets/images/logo.png') }}">
+    <link rel="shortcut icon" href="{{ URL::asset('assets/logo.jpg') }}">
     <link href="{{ URL::asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ URL::asset('assets/css/icons.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ URL::asset('assets/css/style.css') }}" rel="stylesheet" type="text/css">
@@ -23,7 +23,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="text-center">
-                    <a href="#" class="logo logo-admin"><img src="{{ URL::asset('assets/images/logo.png') }}"
+                    <a href="#" class="logo logo-admin"><img src="{{ URL::asset('assets/logo.jpg') }}"
                             height="100" width="300" alt="logo"></a>
                 </div>
                 @if (count($errors) > 0)

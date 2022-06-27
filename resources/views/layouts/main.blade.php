@@ -5,11 +5,11 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <title>Provice Group - Integrated Property Services</title>
+    <title>PT. LAUTAN STEEL INDONESIA</title>
     <meta content="Admin Dashboard" name="description" />
     <meta content="Mannatthemes" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <link rel="shortcut icon" href="{{ URL::asset('assets/images/logo.png') }}">
+    <link rel="shortcut icon" href="{{ URL::asset('assets/logo.jpg') }}">
     <!-- DataTables -->
     <link href="{{ URL::asset('assets/plugins/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet"
         type="text/css" />
@@ -56,7 +56,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    © 2019 Zoter by Mannatthemes.
+                    © 2022 PT. LAUTAN STEEL INDONESIA.
                 </div>
             </div>
         </div>
