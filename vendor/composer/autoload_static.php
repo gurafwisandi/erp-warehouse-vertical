@@ -535,6 +535,7 @@ class ComposerStaticInitd44c8f986f8ec6612ce5d49707c2b44d
         'App\\Http\\Controllers\\RakController' => __DIR__ . '/../..' . '/app/Http/Controllers/RakController.php',
         'App\\Http\\Controllers\\ReceiveController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReceiveController.php',
         'App\\Http\\Controllers\\ReceiveDetailController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReceiveDetailController.php',
+        'App\\Http\\Controllers\\ReportController' => __DIR__ . '/../..' . '/app/Http/Controllers/ReportController.php',
         'App\\Http\\Controllers\\SupplierController' => __DIR__ . '/../..' . '/app/Http/Controllers/SupplierController.php',
         'App\\Http\\Controllers\\UsersController' => __DIR__ . '/../..' . '/app/Http/Controllers/UsersController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',

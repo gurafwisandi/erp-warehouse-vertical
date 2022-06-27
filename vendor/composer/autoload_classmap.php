@@ -19,6 +19,7 @@ return array(
     'App\\Http\\Controllers\\RakController' => $baseDir . '/app/Http/Controllers/RakController.php',
     'App\\Http\\Controllers\\ReceiveController' => $baseDir . '/app/Http/Controllers/ReceiveController.php',
     'App\\Http\\Controllers\\ReceiveDetailController' => $baseDir . '/app/Http/Controllers/ReceiveDetailController.php',
+    'App\\Http\\Controllers\\ReportController' => $baseDir . '/app/Http/Controllers/ReportController.php',
     'App\\Http\\Controllers\\SupplierController' => $baseDir . '/app/Http/Controllers/SupplierController.php',
     'App\\Http\\Controllers\\UsersController' => $baseDir . '/app/Http/Controllers/UsersController.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',

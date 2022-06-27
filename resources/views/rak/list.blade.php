@@ -32,6 +32,7 @@
                                         <th>Lokasi</th>
                                         <th>Keterangan</th>
                                         <th>Item</th>
+                                        <th>Qty</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -43,6 +44,16 @@
                                             <td>{{ $item->lokasi }}</td>
                                             <td>{{ $item->keterangan }}</td>
                                             <td>{{ $item->items->nama . ' - ' . $item->items->panjang . 'm' }}</td>
+                                            <td>
+                                                <?php
+                                                $stock = DB::table('inventory')
+                                                    ->selectraw('sum(qty) as qty_in')
+                                                    ->selectraw('sum(qty_out) as qty_out')
+                                                    ->where('id_rak', $item->id)
+                                                    ->get();
+                                                echo $count = $stock[0]->qty_in - $stock[0]->qty_out;
+                                                ?>
+                                            </td>
                                             <td>
                                                 <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                                     <div class="btn-group btn-group-sm" style="float: none;">

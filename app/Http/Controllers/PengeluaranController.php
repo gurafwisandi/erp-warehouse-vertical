@@ -105,7 +105,6 @@ class PengeluaranController extends Controller
             'item' => ItemModel::all(),
             'header' => PengeluaranModel::findorfail(Crypt::decryptString($id)),
             'details' => PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->get(),
-            'type' => ['Chemical', 'Alat'],
         ];
         return view('pengeluaran.view')->with($data);
     }
@@ -124,7 +123,6 @@ class PengeluaranController extends Controller
             'item' => ItemModel::all(),
             'header' => PengeluaranModel::findorfail(Crypt::decryptString($id)),
             'details' => PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->get(),
-            'type' => ['Chemical', 'Alat'],
         ];
         return view('pengeluaran.edit')->with($data);
     }
@@ -194,25 +192,8 @@ class PengeluaranController extends Controller
         try {
             // update status receive
             $pengeluaran = PengeluaranModel::findOrFail(Crypt::decryptString($id));
-            $cek_alat = PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->where('type_out', 'Alat')->count('id');
-            if ($cek_alat > 0) {
-                $pengeluaran->status = 'Pengiriman Permintaan';
-            } else {
-                $pengeluaran->status = 'Selesai Permintaan';
-            }
+            $pengeluaran->status = 'Pengajuan ke Gudang';
             $pengeluaran->save();
-            // cek detail pengeluaran
-            $detail = PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->get();
-            for ($i = 0; $i < count($detail); $i++) {
-                // update status menjadi OUT
-                InventoryModel::where('id', $detail[$i]->id_inventory)->update(['status' => 'OUT']);
-                // cek stock
-                $stock = InventoryModel::findorfail($detail[$i]->id_inventory);
-                $hasil_qty = InventoryModel::where('id_item', $stock->id_item)->where('status', 'IN')->sum('qty');
-                ItemModel::where('id', $stock->id_item)->update(['qty' => $hasil_qty]);
-                // update status menjadi OUT
-                PengeluaranDetailModel::where('id', $detail[$i]->id)->update(['status_out' => 'OUT']);
-            }
             DB::commit();
             AlertHelper::addAlert(true);
             return redirect('pengeluaran');
@@ -229,27 +210,41 @@ class PengeluaranController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'penerimaan',
-            'item' => ItemModel::all(),
             'header' => PengeluaranModel::findorfail(Crypt::decryptString($id)),
-            'details' => PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->orderby('type_out', 'ASC')->get(),
-            'type' => ['Chemical', 'Alat'],
+            'details' => PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->get(),
         ];
-        return view('pengeluaran.penerimaan')->with($data);
+        return view('pengeluaran.pengeluaran_stock')->with($data);
     }
 
-    public function approve_pengembalian(Request $request, $id)
+    public function approve_penjualan(Request $request, $id)
     {
         DB::beginTransaction();
         try {
             // update status receive
-            $pengeluaran = PengeluaranModel::findOrFail($request->id_pengeluaran);
-            $pengeluaran->status = 'Selesai Permintaan';
+            $pengeluaran = PengeluaranModel::findOrFail(Crypt::decryptString($id));
+            $pengeluaran->status = 'Selesai';
             $pengeluaran->save();
             // menampilkan detail pengeluaran
-            $detail = PengeluaranDetailModel::where('id_pengeluaran', $request->id_pengeluaran)->where('status_out', 'IN')->get();
+            $detail = PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->get();
             for ($i = 0; $i < count($detail); $i++) {
-                // update inventory status jadi IN
-                InventoryModel::where('id', $detail[0]->id_inventory)->update(['status' => 'IN']);
+                // insert inventory
+                $inven = new InventoryModel();
+                $inven->tgl_masuk_gudang = Carbon::now();
+                $inven->qty_out = $detail[$i]->qty_acc;
+                $inven->status_inventory = 'OUT';
+                $inven->id_rak = $detail[$i]->id_rak;
+                $inven->id_item = $detail[$i]->id_item;
+                $inven->id_pengeluaran = $detail[$i]->id_pengeluaran;
+                $inven->id_pengeluaran_detail = $detail[$i]->id;
+                $inven->save();
+
+                $stock = DB::table('inventory')
+                    ->selectraw('sum(qty) as qty_in')
+                    ->selectraw('sum(qty_out) as qty_out')
+                    ->where('id_item', $detail[$i]->id_item)
+                    ->get();
+                $hasil_qty = $stock[0]->qty_in - $stock[0]->qty_out;
+                ItemModel::where('id', $detail[$i]->id_item)->update(['qty' => $hasil_qty]);
             }
             DB::commit();
             AlertHelper::addAlert(true);

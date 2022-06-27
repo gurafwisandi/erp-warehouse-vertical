@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\AlertHelper;
 use App\Models\InventoryModel;
 use App\Models\PengeluaranDetailModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -42,30 +43,28 @@ class PengeluaranDetailController extends Controller
         $request->validate([
             'id_pengeluaran' => 'required',
             'item' => 'required',
-            'rak' => 'required', // isi rak.id|inventory.id as id_inventory
             'qty' => 'required',
         ]);
         DB::beginTransaction();
         try {
             // cek stock inventory
-            $inven = InventoryModel::where('id_rak', $request->rak)->where('id_item', $request->item)->where('status', 'IN')->sum('qty');
-            // cek detail pengeluaran berdasarkan id_item
-            $cek_stock = PengeluaranDetailModel::where('id_rak', $request->rak)->where('id_item', $request->item)->wherenull('status_out')->sum('qty');
-            if (($request->qty + $cek_stock) > $inven) {
-                AlertHelper::addStock(false);
-                return back();
-            }
-            $stock = InventoryModel::where('id_rak', $request->rak)->where('id_item', $request->item)->limit($request->qty)->where('status', 'IN')->get();
-            for ($i = 0; $i < count($stock); $i++) {
-                $pengeluaran = new PengeluaranDetailModel();
-                $pengeluaran->id_pengeluaran = $request->id_pengeluaran;
-                $pengeluaran->id_inventory = $stock[$i]->id; // id_inventory
-                $pengeluaran->id_item = $request->item;
-                $pengeluaran->id_rak = $request->rak;
-                $pengeluaran->type_out = $request->type;
-                $pengeluaran->qty = '1';
-                $pengeluaran->save();
-            }
+            // $inven = InventoryModel::where('id_rak', $request->rak)->where('id_item', $request->item)->where('status', 'IN')->sum('qty');
+            // // cek detail pengeluaran berdasarkan id_item
+            // $cek_stock = PengeluaranDetailModel::where('id_rak', $request->rak)->where('id_item', $request->item)->wherenull('status_out')->sum('qty');
+            // if (($request->qty + $cek_stock) > $inven) {
+            //     AlertHelper::addStock(false);
+            //     return back();
+            // }
+            // $stock = InventoryModel::where('id_rak', $request->rak)->where('id_item', $request->item)->limit($request->qty)->where('status', 'IN')->get();
+            // for ($i = 0; $i < count($stock); $i++) {
+            $pengeluaran = new PengeluaranDetailModel();
+            $pengeluaran->id_pengeluaran = $request->id_pengeluaran;
+            // $pengeluaran->id_inventory = $stock[$i]->id; // id_inventory
+            $pengeluaran->id_item = $request->item;
+            // $pengeluaran->id_rak = $request->rak;
+            $pengeluaran->qty = $request->qty;
+            $pengeluaran->save();
+            // }
             $insertedId = Crypt::encryptString($request->id_pengeluaran);
             DB::commit();
             AlertHelper::addAlert(true);
@@ -111,9 +110,12 @@ class PengeluaranDetailController extends Controller
     {
         DB::beginTransaction();
         try {
-            $item = PengeluaranDetailModel::findOrFail(Crypt::decryptString($id));
-            $item->status_out = 'IN';
-            $item->save();
+            $cek = PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->where('id_item', $request->item)->first();
+            if ($request->qty > $cek->qty) {
+                AlertHelper::addStock(false);
+                return back();
+            }
+            PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->where('id_item', $request->item)->update(['id_rak' => $request->rak, 'qty_acc' => $request->qty]);
             DB::commit();
             AlertHelper::updateAlert(true);
             return back();
@@ -136,6 +138,21 @@ class PengeluaranDetailController extends Controller
         try {
             $item = PengeluaranDetailModel::findOrFail(Crypt::decryptString($id));
             $item->delete();
+            DB::commit();
+            AlertHelper::deleteAlert(true);
+            return back();
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            AlertHelper::deleteAlert(false);
+            return back();
+        }
+    }
+
+    public function delete_qty($id)
+    {
+        DB::beginTransaction();
+        try {
+            PengeluaranDetailModel::findOrFail(Crypt::decryptString($id))->update(['qty_acc' => null]);
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();

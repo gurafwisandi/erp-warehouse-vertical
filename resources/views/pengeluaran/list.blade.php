@@ -45,12 +45,14 @@
                                             <td>{{ $item->keterangan }}</td>
                                             <td>{{ $item->users->name }}</td>
                                             <td>
-                                                @if ($item->status == 'Selesai Permintaan')
+                                                @if ($item->status == 'Selesai')
                                                     <span class="badge badge-success">{{ $item->status }}</span>
                                                 @elseif($item->status == 'Proses Permintaan')
                                                     <span class="badge badge-warning">{{ $item->status }}</span>
                                                 @elseif($item->status == 'Pengiriman Permintaan')
                                                     <span class="badge badge-info">{{ $item->status }}</span>
+                                                @elseif($item->status == 'Pengajuan ke Gudang')
+                                                    <span class="badge badge-secondary">{{ $item->status }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -79,7 +81,7 @@
                                                                     <span class="ti-pencil"></span>
                                                                 </a>
                                                             @endif
-                                                            @if ($item->status == 'Pengiriman Permintaan' and Auth::user()->roles == 'Gudang')
+                                                            @if ($item->status == 'Pengajuan ke Gudang' and Auth::user()->roles == 'Gudang')
                                                                 <a href="{{ route('pengeluaran.acceptance', $id) }}"
                                                                     class="tabledit-edit-button btn btn-sm btn-secondary"
                                                                     style="float: none; margin: 5px;">

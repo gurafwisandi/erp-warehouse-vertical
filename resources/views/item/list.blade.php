@@ -49,8 +49,7 @@
                                             <td>{{ $item->panjang }}</td>
                                             <td>{{ $item->diameter }}</td>
                                             <td>{{ $item->berat }}</td>
-                                            <td class="text-center">{{ $item->qty }}
-                                                {{ $item->qty ? $item->satuan : '' }}</td>
+                                            <td>{{ $item->qty }}</td>
                                             <td>{{ $item->keterangan }}</td>
                                             <td>
                                                 <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">

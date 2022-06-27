@@ -15,8 +15,8 @@ class CreateInventory extends Migration
     {
         Schema::create('inventory', function (Blueprint $table) {
             $table->id();
-            $table->date('tgl_masuk_gudang');
-            $table->double('qty')->nullable();
+            $table->date('tgl_masuk_gudang')->nullable();
+            $table->double('qty')->default('0');
             $table->unsignedBigInteger('id_rak')->nullable();
             $table->foreign('id_rak')->references('id')->on('rak');
             $table->unsignedBigInteger('id_item')->nullable();

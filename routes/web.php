@@ -48,7 +48,7 @@ Route::group(
         Route::resource('item', ItemController::class);
         Route::get('/stock/{id}', [ItemController::class, 'stock'])->name('item.stock');
         Route::post('/dropdown', [ItemController::class, 'dropdown'])->name('item.dropdown');
-        Route::post('/dropdown_pengeluaran', [ItemController::class, 'dropdown_pengeluaran'])->name('item.dropdown_pengeluaran');
+        // Route::post('/dropdown_pengeluaran', [ItemController::class, 'dropdown_pengeluaran'])->name('item.dropdown_pengeluaran');
         Route::post('/dropdown_rak', [ItemController::class, 'dropdown_rak'])->name('item.dropdown_rak');
         Route::resource('rak', RakController::class);
         Route::get('/stock_rak/{id}', [RakController::class, 'stock_rak'])->name('rak.stock_rak');
@@ -61,9 +61,11 @@ Route::group(
         Route::resource('inventory', InventoryController::class);
         Route::resource('pengeluaran', PengeluaranController::class);
         Route::delete('/approve_pengeluaran/{id}', [PengeluaranController::class, 'approve_pengeluaran'])->name('pengeluaran.approve_pengeluaran');
+        Route::patch('/approve_penjualan/{id}', [PengeluaranController::class, 'approve_penjualan'])->name('pengeluaran.approve_penjualan');
         Route::get('/acceptance/{id}', [PengeluaranController::class, 'acceptance'])->name('pengeluaran.acceptance');
         Route::patch('/approve_pengembalian/{id}', [PengeluaranController::class, 'approve_pengembalian'])->name('pengeluaran.approve_pengembalian');
         Route::resource('pengeluaran_detail', PengeluaranDetailController::class);
+        Route::delete('/delete_qty/{id}', [PengeluaranDetailController::class, 'delete_qty'])->name('pengeluaran_detail.delete_qty');
         Route::get('penerimaan', [ReportController::class, 'penerimaan'])->name('report.penerimaan');
         Route::get('rep_pengeluaran', [ReportController::class, 'rep_pengeluaran'])->name('report.rep_pengeluaran');
         Route::get('rep_sales', [ReportController::class, 'rep_sales'])->name('report.rep_sales');

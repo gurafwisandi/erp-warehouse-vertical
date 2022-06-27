@@ -25,22 +25,32 @@
                                         <label class="my-2 pb-1">Nama Rak</label>
                                         @if (count($list))
                                             <?php
-                                            $qty = $list[0]->raks->no_rak . ' [' . $list[0]->raks->keterangan . ']';
-                                            $count = count($list);
+                                            $title = $list[0]->raks->no_rak . ' [' . $list[0]->raks->keterangan . ']';
+                                            ?>
+                                            <?php
+                                            $stock = DB::table('inventory')
+                                                ->selectraw('sum(qty) as qty_in')
+                                                ->selectraw('sum(qty_out) as qty_out')
+                                                ->where('id_rak', $list[0]->id_rak)
+                                                ->get();
+                                            $count = $stock[0]->qty_in - $stock[0]->qty_out;
+                                            $satuan = $list[0]->items->satuan;
                                             ?>
                                         @else
                                             <?php
-                                            $qty = '-';
+                                            $title = '-';
                                             $count = '-';
+                                            $satuan = '';
                                             ?>
                                         @endif
-                                        <input type="text" class="form-control" value="{{ $qty }}" disabled />
+                                        <input type="text" class="form-control" value="{{ $title }}" disabled />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label class="my-2 pb-1">Qty</label>
-                                        <input type="text" class="form-control" value="{{ $count }}" disabled />
+                                        <input type="text" class="form-control" value="{{ $count . ' ' . $satuan }}"
+                                            disabled />
                                     </div>
                                 </div>
                             </div>
@@ -49,10 +59,10 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode Penerimaan</th>
+                                        <th>Kode Transaksi</th>
                                         <th>Tgl Masuk Gudang</th>
                                         <th>Nama</th>
-                                        <th>Panajang</th>
+                                        <th>Panjang</th>
                                         <th>Qty</th>
                                     </tr>
                                 </thead>
@@ -60,11 +70,23 @@
                                     @foreach ($list as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->receive->kode_receive }}</td>
+                                            <td>
+                                                @if ($item->status_inventory == 'IN')
+                                                    {{ $item->receive ? $item->receive->kode_receive : '' }}
+                                                @else
+                                                    {{ $item->pengeluaran ? $item->pengeluaran->kode_pengeluaran : '' }}
+                                                @endif
+                                            </td>
                                             <td>{{ $item->tgl_masuk_gudang }}</td>
-                                            <td>{{ $item->items->nama }}</td>
-                                            <td>{{ $item->items->panjang . 'm' }}</td>
-                                            <td>{{ $item->qty . ' ' . $item->items->satuan }}</td>
+                                            <td>{{ $item->items->nama . ' ' . $item->items->panjang . 'm' }}</td>
+                                            <td>{{ $item->status_inventory }}</td>
+                                            <td>
+                                                @if ($item->status_inventory == 'IN')
+                                                    {{ $item->qty . ' ' . $item->items->satuan }}
+                                                @else
+                                                    {{ $item->qty_out . ' ' . $item->items->satuan }}
+                                                @endif
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -72,7 +94,7 @@
                             <div class="form-group mb-0">
                                 <div>
                                     <a class="btn btn-secondary waves-effect m-l-5"
-                                        href="{{ route('rak.index') }}">Kembali</a>
+                                        href="{{ url()->previous() }}">Kembali</a>
                                 </div>
                             </div>
                         </div>

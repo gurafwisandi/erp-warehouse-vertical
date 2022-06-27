@@ -210,18 +210,15 @@ class ItemController extends Controller
         return $item;
     }
 
-    public function dropdown_pengeluaran(Request $request)
-    {
-        $item = ItemModel::select('id', 'nama', 'qty')->where('type', $request->type)->where('qty', '>', 0)->get();
-        return $item;
-    }
-
     public function dropdown_receive(Request $request)
     {
-        // $item = RakModel::where('id_item', $request->item)->get();
         $item = DB::table('rak')
-            ->select('rak.*', 'item.qty as qty_stok')
+            ->select('rak.*', 'inventory.qty as qty_stok')
             ->join('item', 'item.id', '=', 'rak.id_item')
+            ->leftJoin("inventory", function ($join) {
+                $join->on("inventory.id_rak", "=", "rak.id")
+                    ->on("inventory.id_item", "=", "item.id");
+            })
             ->where('rak.id_item', '=', $request->item)
             ->orderBy('rak.no_rak', 'ASC')
             ->get();
@@ -239,44 +236,27 @@ class ItemController extends Controller
         return view('item.stock')->with($data);
     }
 
-    // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function dropdown_rak(Request $request)
     {
         $item = DB::table('inventory')
             ->select('rak.*', 'inventory.id as id_inventory')
             ->selectRaw('sum(inventory.qty) as qty')
+            ->selectRaw('sum(inventory.qty_out) as qty_out')
             ->join('rak', 'rak.id', '=', 'inventory.id_rak')
             ->wherenull('inventory.deleted_at')
             ->where('inventory.id_item', '=', $request->item)
-            ->where('inventory.status', '=', 'IN')
             ->groupBy('inventory.id_rak')
             ->groupBy('inventory.id_item')
+            ->havingRaw("sum(inventory.qty) != sum(inventory.qty_out)")
             ->orderBy('rak.id', 'ASC')
             ->get();
         return $item;
     }
+    // ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    // public function dropdown_pengeluaran(Request $request)
+    // {
+    //     $item = ItemModel::select('id', 'nama', 'qty')->where('type', $request->type)->where('qty', '>', 0)->get();
+    //     return $item;
+    // }
 }

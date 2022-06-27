@@ -26,4 +26,9 @@ class InventoryModel extends Model
     {
         return $this->belongsTo(ReceiveModel::class, 'id_receive');
     }
+
+    public function pengeluaran()
+    {
+        return $this->belongsTo(PengeluaranModel::class, 'id_pengeluaran');
+    }
 }

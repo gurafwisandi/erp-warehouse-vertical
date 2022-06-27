@@ -68,6 +68,7 @@ class InventoryController extends Controller
             $inven = new InventoryModel();
             $inven->tgl_masuk_gudang = $request->tgl_masuk_gudang;
             $inven->qty = $request->qty;
+            $inven->status_inventory = 'IN';
             $inven->id_rak = $request->rak;
             $inven->id_item = $request->item;
             $inven->id_receive = $request->id_receive;
