@@ -7,10 +7,8 @@
                     <div class="page-title-box">
                         <div class="btn-group float-right">
                             <ol class="breadcrumb hide-phone p-0 m-0">
-                                <li class="breadcrumb-item active">{{ ucwords($title) }}</li>
                             </ol>
                         </div>
-                        <h4 class="page-title">{{ strtoupper($menu) }}</h4>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -19,13 +17,16 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            <h4 class="page-title">{{ strtoupper($menu) }}</h4>
+                            <h6 class="page-title">Penerimaan</h6>
+                            <br>
                             <form>
                                 <div class="row">
                                     <div class="col-md-2">
                                         <div class="form-group mb-0">
                                             <label class="my-2 py-1">Sales</label>
                                             <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="name">
+                                                <select class=" form-control mb-3 custom-select" name="name">
                                                     <option value="">--Pilih Sales--</option>
                                                     @foreach ($users as $user)
                                                         <option value="{{ $user->id }}"<?php
@@ -44,7 +45,7 @@
                                         <div class="form-group mb-0">
                                             <label class="my-2 py-1">Item</label>
                                             <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="item">
+                                                <select class=" form-control mb-3 custom-select" name="item">
                                                     <option value="">--Pilih Item--</option>
                                                     @foreach ($item as $item)
                                                         <option value="{{ $item->id }}"<?php
@@ -53,25 +54,6 @@
                                                         }
                                                         ?>>
                                                             {{ $item->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-group mb-0">
-                                            <label class="my-2 py-1">Type</label>
-                                            <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="type">
-                                                    <option value="">--Pilih Type--</option>
-                                                    @foreach ($type as $type)
-                                                        <option value="{{ $type }}"<?php
-                                                        if (isset($_GET['type']) and $_GET['type'] != '' and $type == $_GET['type']) {
-                                                            echo 'selected';
-                                                        }
-                                                        ?>>
-                                                            {{ $type }}
                                                         </option>
                                                     @endforeach
                                                 </select>
@@ -95,7 +77,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-1">
+                                    <div class="col-md-2">
                                         <label class="my-2 pb-1">Qty</label>
                                         <div class="form-group mb-0">
                                             <input type="number" class="form-control" name="qty" min='0'
@@ -123,8 +105,7 @@
                                         <th>No</th>
                                         <th class="text-center">Sales</th>
                                         <th>Nama Item</th>
-                                        <th>Type</th>
-                                        <th class="text-center">Qty</th>
+                                        <th class="text-center">Qty Pengeluaran</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -132,9 +113,8 @@
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->name }}</td>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->type }}</td>
-                                            <td>{{ $item->qty }}</td>
+                                            <td>{{ $item->nama . ' - ' . $item->panjang . 'm' }}</td>
+                                            <td>{{ $item->qty . ' ' . $item->satuan }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

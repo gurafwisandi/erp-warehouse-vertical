@@ -7,10 +7,8 @@
                     <div class="page-title-box">
                         <div class="btn-group float-right">
                             <ol class="breadcrumb hide-phone p-0 m-0">
-                                <li class="breadcrumb-item active">{{ ucwords($title) }}</li>
                             </ol>
                         </div>
-                        <h4 class="page-title">{{ strtoupper($menu) }}</h4>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -19,6 +17,9 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            <h4 class="page-title">{{ strtoupper($menu) }}</h4>
+                            <h6 class="page-title">Pengeluaran</h6>
+                            <br>
                             <form>
                                 <div class="row">
                                     <div class="col-md-2">
@@ -48,10 +49,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
+                                        <label class="my-2 py-1">Sales</label>
                                         <div class="form-group mb-0">
-                                            <label class="my-2 py-1">Sales</label>
                                             <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="id_user">
+                                                <select class=" form-control mb-3 custom-select" name="id_user">
                                                     <option value="">--Pilih Sales--</option>
                                                     @foreach ($user as $item)
                                                         <option value="{{ $item->id }}"<?php
@@ -67,10 +68,10 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
+                                        <label class="my-2 py-1">Status</label>
                                         <div class="form-group mb-0">
-                                            <label class="my-2 py-1">Status</label>
                                             <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="status">
+                                                <select class=" form-control mb-3 custom-select" name="status">
                                                     <option value="">--Pilih Status--</option>
                                                     @foreach ($status as $status)
                                                         <option value="{{ $status }}"<?php
@@ -119,12 +120,12 @@
                                             <td>{{ $item->keterangan }}</td>
                                             <td>{{ $item->users->name }}</td>
                                             <td>
-                                                @if ($item->status == 'Selesai Permintaan')
+                                                @if ($item->status == 'Selesai')
                                                     <span class="badge badge-success">{{ $item->status }}</span>
                                                 @elseif($item->status == 'Proses Permintaan')
                                                     <span class="badge badge-warning">{{ $item->status }}</span>
-                                                @elseif($item->status == 'Pengiriman Permintaan')
-                                                    <span class="badge badge-info">{{ $item->status }}</span>
+                                                @elseif($item->status == 'Pengajuan ke Gudang')
+                                                    <span class="badge badge-secondary">{{ $item->status }}</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -132,15 +133,16 @@
                                                     <div class="btn-group btn-group-sm" style="float: none;">
                                                         <?php
                                                         $qty = DB::table('pengeluaran_detail')
-                                                            ->select('type_out')
-                                                            ->selectRaw('sum(qty) as qty')
+                                                            ->select('item.nama', 'panjang')
+                                                            ->selectRaw('sum(qty_acc) as qty_acc')
+                                                            ->join('item', 'item.id', '=', 'pengeluaran_detail.id_item')
                                                             ->where('id_pengeluaran', $item->id)
-                                                            ->wherenull('deleted_at')
-                                                            ->groupBY('type_out')
+                                                            ->wherenull('pengeluaran_detail.deleted_at')
+                                                            ->groupBY('pengeluaran_detail.id_item')
                                                             ->get();
                                                         ?>
                                                         @foreach ($qty as $item)
-                                                            {{ $item->type_out . ' [' . $item->qty . ']' }}
+                                                            {{ $item->nama . ' - ' . $item->panjang . 'm [' . $item->qty_acc . ']' }}
                                                             <br>
                                                         @endforeach
                                                     </div>

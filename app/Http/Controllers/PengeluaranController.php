@@ -105,6 +105,7 @@ class PengeluaranController extends Controller
             'item' => ItemModel::all(),
             'header' => PengeluaranModel::findorfail(Crypt::decryptString($id)),
             'details' => PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->get(),
+            'invens' => InventoryModel::where('id_pengeluaran', Crypt::decryptString($id))->get(),
         ];
         return view('pengeluaran.view')->with($data);
     }

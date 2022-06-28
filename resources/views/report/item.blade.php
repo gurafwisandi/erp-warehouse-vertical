@@ -22,25 +22,6 @@
                             <form>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <div class="form-group mb-0">
-                                            <label class="my-2 py-1">Type</label>
-                                            <div>
-                                                <select class="select2 form-control mb-3 custom-select" name="type">
-                                                    <option value="">--Pilih Type--</option>
-                                                    @foreach ($type as $type)
-                                                        <option value="{{ $type }}"<?php
-                                                        if (isset($_GET['type']) and $_GET['type'] != '' and $type == $_GET['type']) {
-                                                            echo 'selected';
-                                                        }
-                                                        ?>>
-                                                            {{ $type }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
                                         <label class="my-2 pb-1">Qty</label>
                                         <div class="form-group mb-0">
                                             <input type="number" class="form-control" name="qty"
@@ -68,7 +49,6 @@
                                         <th>No</th>
                                         <th class="text-center">Gambar</th>
                                         <th>Nama Item</th>
-                                        <th>Type</th>
                                         <th class="text-center">Qty</th>
                                         <th>Keterangan</th>
                                     </tr>
@@ -80,8 +60,7 @@
                                             <td class="text-center"><img
                                                     src="{{ URL::asset('files/item/' . $item->gambar) }}"
                                                     style="width: 150px;height:150px;" class="rounded-circle"></td>
-                                            <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->type }}</td>
+                                            <td>{{ $item->nama . ' ' . $item->panjang . 'm' }}</td>
                                             <td class="text-center">{{ $item->qty }}
                                                 {{ $item->qty ? $item->satuan : '' }}</td>
                                             <td>{{ $item->keterangan }}</td>

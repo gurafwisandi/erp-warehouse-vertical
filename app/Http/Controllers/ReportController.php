@@ -52,7 +52,7 @@ class ReportController extends Controller
             'title' => 'list',
             'list' => $item,
             'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
-            'status' => ['Proses Penerimaan', 'Proses Penempatan', 'Selesai Penerimaan'],
+            'status' => ['Pembuatan Request', 'Proses Request', 'Selesai'],
         ];
         return view('report.penerimaan')->with($data);
     }
@@ -95,7 +95,7 @@ class ReportController extends Controller
             'title' => 'list',
             'list' => $item,
             'user' => User::where('roles', 'Sales')->get(),
-            'status' => ['Proses Permintaan', 'Pengiriman Permintaan', 'Selesai Permintaan'],
+            'status' => ['Proses Permintaan', 'Pengajuan ke Gudang', 'Selesai'],
         ];
         return view('report.pengeluaran')->with($data);
     }
@@ -132,7 +132,7 @@ class ReportController extends Controller
 
     public function rep_sales(Request $request)
     {
-        if ($request->type or $request->item or $request->name or $request->start or $request->end or $request->qty) {
+        if ($request->item or $request->name or $request->start or $request->end or $request->qty) {
             $matchThese = [];
             if ($request->name) {
                 $name = array('users.id' => $request->name);
@@ -140,41 +140,35 @@ class ReportController extends Controller
             } else {
                 $name = array();
             }
-            if ($request->type) {
-                $type = array('item.type' => $request->type);
-                array_push($matchThese, $type);
-            } else {
-                $type = array();
-            }
             if ($request->item) {
                 $item = array('item.id' => $request->item);
                 array_push($matchThese, $item);
             } else {
                 $item = array();
             }
-            $matchThese = $type + $item + $name;
+            $matchThese = $item + $name;
             $start = preg_replace("/(\d+)\D+(\d+)\D+(\d+)/", "$3-$1-$2", $request->start);
             $end = preg_replace("/(\d+)\D+(\d+)\D+(\d+)/", "$3-$1-$2", $request->end);
             if ($request->qty == null and $request->start) {
                 $item = DB::table('pengeluaran')
-                    ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.type')
-                    ->selectRaw('SUM(pengeluaran_detail.qty) as qty')
+                    ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.panjang', 'item.satuan')
+                    ->selectRaw('SUM(pengeluaran_detail.qty_acc) as qty')
                     ->join('pengeluaran_detail', 'pengeluaran_detail.id_pengeluaran', '=', 'pengeluaran.id')
                     ->join('item', 'item.id', '=', 'pengeluaran_detail.id_item')
                     ->join('users', 'users.id', '=', 'pengeluaran.id_user')
-                    ->where('pengeluaran.status', '=', 'Selesai Permintaan')
+                    ->where('pengeluaran.status', '=', 'Selesai')
                     ->whereBetween('tgl_pengeluaran', [$start, $end])
                     ->where($matchThese)
                     ->groupBy('users.id', 'pengeluaran_detail.id_item')
                     ->get();
             } else if ($request->qty != null and $request->start) {
                 $item = DB::table('pengeluaran')
-                    ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.type')
-                    ->selectRaw('SUM(pengeluaran_detail.qty) as qty')
+                    ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.panjang', 'item.satuan')
+                    ->selectRaw('SUM(pengeluaran_detail.qty_acc) as qty')
                     ->join('pengeluaran_detail', 'pengeluaran_detail.id_pengeluaran', '=', 'pengeluaran.id')
                     ->join('item', 'item.id', '=', 'pengeluaran_detail.id_item')
                     ->join('users', 'users.id', '=', 'pengeluaran.id_user')
-                    ->where('pengeluaran.status', '=', 'Selesai Permintaan')
+                    ->where('pengeluaran.status', '=', 'Selesai')
                     ->whereBetween('tgl_pengeluaran', [$start, $end])
                     ->where($matchThese)
                     ->groupBy('users.id', 'pengeluaran_detail.id_item')
@@ -182,23 +176,23 @@ class ReportController extends Controller
                     ->get();
             } elseif ($request->qty == null) {
                 $item = DB::table('pengeluaran')
-                    ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.type')
-                    ->selectRaw('SUM(pengeluaran_detail.qty) as qty')
+                    ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.panjang', 'item.satuan')
+                    ->selectRaw('SUM(pengeluaran_detail.qty_acc) as qty')
                     ->join('pengeluaran_detail', 'pengeluaran_detail.id_pengeluaran', '=', 'pengeluaran.id')
                     ->join('item', 'item.id', '=', 'pengeluaran_detail.id_item')
                     ->join('users', 'users.id', '=', 'pengeluaran.id_user')
-                    ->where('pengeluaran.status', '=', 'Selesai Permintaan')
+                    ->where('pengeluaran.status', '=', 'Selesai')
                     ->where($matchThese)
                     ->groupBy('users.id', 'pengeluaran_detail.id_item')
                     ->get();
             } else if ($request->qty != null) {
                 $item = DB::table('pengeluaran')
-                    ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.type')
-                    ->selectRaw('SUM(pengeluaran_detail.qty) as qty')
+                    ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.panjang', 'item.satuan')
+                    ->selectRaw('SUM(pengeluaran_detail.qty_acc) as qty')
                     ->join('pengeluaran_detail', 'pengeluaran_detail.id_pengeluaran', '=', 'pengeluaran.id')
                     ->join('item', 'item.id', '=', 'pengeluaran_detail.id_item')
                     ->join('users', 'users.id', '=', 'pengeluaran.id_user')
-                    ->where('pengeluaran.status', '=', 'Selesai Permintaan')
+                    ->where('pengeluaran.status', '=', 'Selesai')
                     ->where($matchThese)
                     ->groupBy('users.id', 'pengeluaran_detail.id_item')
                     ->having('qty', '=', $request->qty)
@@ -206,12 +200,12 @@ class ReportController extends Controller
             }
         } else {
             $item = DB::table('pengeluaran')
-                ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.type')
-                ->selectRaw('SUM(pengeluaran_detail.qty) as qty')
+                ->select('name', 'pengeluaran.kode_pengeluaran', 'pengeluaran.tgl_pengeluaran', 'item.nama', 'item.panjang', 'item.satuan')
+                ->selectRaw('SUM(pengeluaran_detail.qty_acc) as qty')
                 ->join('pengeluaran_detail', 'pengeluaran_detail.id_pengeluaran', '=', 'pengeluaran.id')
                 ->join('item', 'item.id', '=', 'pengeluaran_detail.id_item')
                 ->join('users', 'users.id', '=', 'pengeluaran.id_user')
-                ->where('pengeluaran.status', '=', 'Selesai Permintaan')
+                ->where('pengeluaran.status', '=', 'Selesai')
                 ->groupBy('users.id', 'pengeluaran_detail.id_item')
                 ->get();
         }
@@ -221,7 +215,6 @@ class ReportController extends Controller
             'list' => $item,
             'users' => User::where('roles', 'Sales')->get(),
             'item' => ItemModel::all(),
-            'type' => ['Chemical', 'Alat'],
         ];
         return view('report.sales')->with($data);
     }

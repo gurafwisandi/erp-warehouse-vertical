@@ -49,8 +49,6 @@
                                                     <span class="badge badge-success">{{ $item->status }}</span>
                                                 @elseif($item->status == 'Proses Permintaan')
                                                     <span class="badge badge-warning">{{ $item->status }}</span>
-                                                @elseif($item->status == 'Pengiriman Permintaan')
-                                                    <span class="badge badge-info">{{ $item->status }}</span>
                                                 @elseif($item->status == 'Pengajuan ke Gudang')
                                                     <span class="badge badge-secondary">{{ $item->status }}</span>
                                                 @endif

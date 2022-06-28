@@ -46,10 +46,10 @@
                                                     src="{{ URL::asset('files/item/' . $item->gambar) }}"
                                                     style="width: 150px;height:150px;" class="rounded-circle"></td>
                                             <td>{{ $item->nama }}</td>
-                                            <td>{{ $item->panjang }}</td>
+                                            <td>{{ $item->panjang . 'm' }}</td>
                                             <td>{{ $item->diameter }}</td>
                                             <td>{{ $item->berat }}</td>
-                                            <td>{{ $item->qty }}</td>
+                                            <td>{{ $item->qty . ' ' . $item->satuan }}</td>
                                             <td>{{ $item->keterangan }}</td>
                                             <td>
                                                 <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">

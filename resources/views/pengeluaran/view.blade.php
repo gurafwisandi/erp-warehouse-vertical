@@ -80,6 +80,36 @@
                                     </table>
                                 </div>
                             </div>
+                            <hr>
+                            <div class="form-group mb-0">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table id="datatable-buttons" class="table table-striped table-bordered w-100">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Item</th>
+                                                <th>Rak</th>
+                                                <th>Qty</th>
+                                                <th>Tgl Keluar Gudang</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($invens as $inven)
+                                                <tr>
+                                                    <td>{{ $loop->iteration }}</td>
+                                                    <td>{{ $inven->items->nama . ' - ' . $inven->items->panjang . 'm' }}
+                                                    </td>
+                                                    <td>{{ $inven->raks->no_rak . ' - ' . $inven->raks->lokasi }}</td>
+                                                    <td>{{ $inven->qty_out . ' ' . $inven->items->satuan }}</td>
+                                                    <td>{{ $inven->tgl_masuk_gudang }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             <div class="form-group mb-0">
                                 <div>
                                     <a class="btn btn-secondary waves-effect m-l-5"
