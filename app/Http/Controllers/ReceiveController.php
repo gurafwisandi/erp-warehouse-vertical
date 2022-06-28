@@ -54,7 +54,6 @@ class ReceiveController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'add',
-            'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'kode_receive' => $generate_registration_number,
         ];
         return view('receive.add')->with($data);
@@ -71,7 +70,6 @@ class ReceiveController extends Controller
         $request->validate([
             'kode_receive' => 'required|max:64|unique:receive,kode_receive,NULL,id,deleted_at,NULL',
             'tgl_receive' => 'required',
-            'id_vendor' => 'required',
             'keterangan' => 'max:128',
         ]);
         DB::beginTransaction();
@@ -81,7 +79,6 @@ class ReceiveController extends Controller
             $receive->tgl_receive = $request->tgl_receive;
             $receive->keterangan = $request->keterangan;
             $receive->status = 'Pembuatan Request';
-            $receive->id_vendor = $request->id_vendor;
             $receive->id_user = Auth::user()->id;
             $receive->save();
             $insertedId = Crypt::encryptString($receive->id);
@@ -107,7 +104,6 @@ class ReceiveController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'penempatan',
-            'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'item' => ReceiveModel::findorfail(Crypt::decryptString($id)),
             'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->get(),
             'invens' => InventoryModel::where('id_receive', Crypt::decryptString($id))->get(),
@@ -126,7 +122,6 @@ class ReceiveController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'penerimaan',
-            'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'item' => ReceiveModel::findorfail(Crypt::decryptString($id)),
             'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->get(),
             'items' => ItemModel::all(),

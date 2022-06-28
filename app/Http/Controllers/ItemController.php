@@ -45,7 +45,6 @@ class ItemController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'add',
-            'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'satuan' => ['Pasang', 'Unit', 'Pcs'],
         ];
         return view('item.add')->with($data);
@@ -67,7 +66,6 @@ class ItemController extends Controller
             'panjang' => 'required|max:64',
             'berat' => 'required|max:64',
             'keterangan' => 'required|max:128',
-            'id_vendor' => 'required|max:64',
         ]);
         DB::beginTransaction();
         try {
@@ -83,7 +81,6 @@ class ItemController extends Controller
                 $item->gambar = $fileName;
                 $request->file->move(public_path('files/item'), $fileName);
             }
-            $item->id_vendor = $request->id_vendor;
             $item->id_user = Auth::user()->id;
             $item->save();
 
@@ -110,7 +107,6 @@ class ItemController extends Controller
             'menu' => $this->menu,
             'title' => 'view',
             'item' => ItemModel::findorfail(Crypt::decryptString($id)),
-            'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'satuan' => ['Pasang', 'Unit', 'Pcs'],
         ];
         return view('item.view')->with($data);
@@ -128,7 +124,6 @@ class ItemController extends Controller
             'menu' => $this->menu,
             'title' => 'edit',
             'item' => ItemModel::findorfail(Crypt::decryptString($id)),
-            'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'satuan' => ['Pasang', 'Unit', 'Pcs'],
         ];
         return view('item.edit')->with($data);
@@ -152,7 +147,6 @@ class ItemController extends Controller
             'panjang' => 'required|max:64',
             'berat' => 'required|max:64',
             'keterangan' => 'required|max:128',
-            'id_vendor' => 'required|max:64',
         ]);
         DB::beginTransaction();
         try {
@@ -169,7 +163,6 @@ class ItemController extends Controller
                 $request->file->move(public_path('files/item'), $fileName);
                 File::delete('files/item/' . $request->images_old);
             }
-            $item->id_vendor = $request->id_vendor;
             $item->id_user = Auth::user()->id;
             $item->save();
             DB::commit();

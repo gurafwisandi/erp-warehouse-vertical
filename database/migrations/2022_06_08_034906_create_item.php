@@ -23,8 +23,6 @@ class CreateItem extends Migration
             $table->double('berat');
             $table->double('qty')->nullable();
             $table->string('keterangan', 128);
-            $table->unsignedBigInteger('id_vendor')->nullable();
-            $table->foreign('id_vendor')->references('id')->on('vendor');
             $table->unsignedBigInteger('id_user')->nullable();
             $table->foreign('id_user')->references('id')->on('users');
             $table->timestamps();

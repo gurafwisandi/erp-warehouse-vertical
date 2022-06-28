@@ -14,13 +14,13 @@
                         <span> User</span>
                     </a>
                 </li>
-                <li class="has-submenu ">
+                {{-- <li class="has-submenu ">
                     <a href="{{ route('supplier.index') }}"
                         {{ Request::segment(1) == 'supplier' ? 'active' : '' }}">
                         <i class="typcn typcn-flag"></i>
                         <span> Vendor</span>
                     </a>
-                </li>
+                </li> --}}
                 <li class="has-submenu ">
                     <a href="{{ route('item.index') }}" {{ Request::segment(1) == 'item' ? 'active' : '' }}">
                         <i class="typcn typcn-info-large"></i>

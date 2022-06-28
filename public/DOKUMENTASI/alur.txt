@@ -1,0 +1,17 @@
+# user, item, rak yang bisa crud *akun purchasing
+# penerimaan 
+*akun purchasing
+1. tambah request pemesanan (status pemesanan "Pembuatan Request")
+2. pilih item yang ada di request
+3. approve request (menyatakan request sudah selesai dan status berubah menjadi "Proses Request")
+*akun gudang
+4. melakukan penerimaan barang dan penempatan ke rak mana
+5. lalu klik approve jika semua barang sudah diterima (status akan berubah menjadi "Selesai")
+# pengeluaran
+*akun sales
+1. tambah request pengeluaran barang (status "Proses Permintaan")
+2. pilih item yang ada di keluarkan
+3. approve (status menjadi "Pengajuan ke Gudang")
+*akun gudang
+4. pilih item dirak yang tersedia dan qty yang akan dikeluarkan berdasarkan request atau stok yg tersedia
+5. lalu klik approve (status menjadi "selesa")

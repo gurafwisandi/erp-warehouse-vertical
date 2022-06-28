@@ -73,20 +73,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group mb-0">
-                                    <label class="my-2 py-1">Vendor</label>
-                                    <div>
-                                        <select class="form-control mb-3 custom-select" name="id_vendor" required>
-                                            <option value="">--Pilih Vendor--</option>
-                                            @foreach ($vendor as $item)
-                                                <option value="{{ $item->id }}">
-                                                    {{ $item->nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    {!! $errors->first('id_vendor', '<div class="invalid-validasi">:message</div>') !!}
-                                </div>
-                                <div class="form-group mb-0">
                                     <label class="my-2 py-1">&nbsp;</label>
                                 </div>
                                 <div class="form-group mb-0">

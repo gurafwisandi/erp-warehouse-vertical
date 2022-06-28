@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex flex-row">
@@ -41,7 +41,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        {{-- <div class="col-lg-3">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="d-flex flex-row">
@@ -63,8 +63,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3">
+                        </div> --}}
+                        <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="search-type-arrow"></div>
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-3">
+                        <div class="col-lg-4">
                             <div class="card">
                                 <div class="card-body">
                                     <div class="search-type-arrow"></div>

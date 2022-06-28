@@ -44,23 +44,6 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 py-1">Vendor</label>
-                                            <div>
-                                                <select class=" form-control mb-3 custom-select" name="id_vendor" required>
-                                                    <option value="">--Pilih Vendor--</option>
-                                                    @foreach ($vendor as $vendor)
-                                                        <option value="{{ $vendor->id }}"
-                                                            {{ $item->id_vendor == $vendor->id ? 'selected' : '' }}>
-                                                            {{ $vendor->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            {!! $errors->first('id_vendor', '<div class="invalid-validasi">:message</div>') !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-0">
                                             <label class="my-2 py-1">Keterangan</label>
                                             <div>
                                                 <textarea name="keterangan" class="form-control" rows="5" required placeholder="Keterangan">{{ $item->keterangan }}</textarea>

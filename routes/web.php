@@ -41,7 +41,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('aut
 Route::group(
     ['middleware' => 'auth'],
     function () {
-        Route::resource('supplier', SupplierController::class);
+        // Route::resource('supplier', SupplierController::class);
         Route::resource('user', UsersController::class);
         Route::get('/profile/{id}', [UsersController::class, 'profile'])->name('user.profile');
         Route::patch('/update_profile/{id}', [UsersController::class, 'update_profile'])->name('user.update_profile');

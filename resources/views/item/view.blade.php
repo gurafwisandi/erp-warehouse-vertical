@@ -77,21 +77,6 @@
                                     </div>
                                 </div>
                                 <div class="form-group mb-0">
-                                    <label class="my-2 py-1">Vendor</label>
-                                    <div>
-                                        <select class=" form-control mb-3 custom-select" name="id_vendor" disabled>
-                                            <option value="">--Pilih Vendor--</option>
-                                            @foreach ($vendor as $item_ven)
-                                                <option value="{{ $item_ven->id }}"
-                                                    {{ $item_ven->id == $item->id_vendor ? 'selected' : '' }}>
-                                                    {{ $item_ven->nama }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    {!! $errors->first('id_vendor', '<div class="invalid-validasi">:message</div>') !!}
-                                </div>
-                                <div class="form-group mb-0">
                                     <label class="my-2 pb-1">Qty</label>
                                     <input type="text" class="form-control" name="qty" disabled
                                         value="{{ $item->qty }}" placeholder="Qty" />

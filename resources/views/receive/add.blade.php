@@ -42,22 +42,6 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 py-1">Vendor</label>
-                                            <div>
-                                                <select class=" form-control mb-3 custom-select" name="id_vendor" required>
-                                                    <option value="">--Pilih Vendor--</option>
-                                                    @foreach ($vendor as $item)
-                                                        <option value="{{ $item->id }}">
-                                                            {{ $item->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            {!! $errors->first('id_vendor', '<div class="invalid-validasi">:message</div>') !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-0">
                                             <label class="my-2 py-1">Keterangan</label>
                                             <div>
                                                 <textarea name="keterangan" class="form-control" rows="5" required placeholder="Keterangan">{{ old('keterangan') }}</textarea>
@@ -68,6 +52,7 @@
                                 </div>
                                 <div class="form-group mb-0">
                                     <div>
+                                        <br>
                                         <a class="btn btn-secondary waves-effect m-l-5"
                                             href="{{ route('rak.index') }}">Kembali</a>
                                         <button type="submit" class="btn btn-primary waves-effect waves-light">

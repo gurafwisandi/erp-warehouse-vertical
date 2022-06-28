@@ -31,7 +31,6 @@
                                         <th>Kode Penerimaan</th>
                                         <th>Tgl</th>
                                         <th>Keterangan</th>
-                                        <th>Vendor</th>
                                         <th>User Input</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
@@ -44,7 +43,6 @@
                                             <td>{{ $item->kode_receive }}</td>
                                             <td>{{ $item->tgl_receive }}</td>
                                             <td>{{ $item->keterangan }}</td>
-                                            <td>{{ $item->vendors->nama }}</td>
                                             <td>{{ $item->users->name }}</td>
                                             <td>
                                                 @if ($item->status == 'Selesai')
