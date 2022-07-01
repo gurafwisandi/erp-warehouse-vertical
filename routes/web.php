@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\GudangController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\LoginController;
@@ -42,6 +43,7 @@ Route::group(
     ['middleware' => 'auth'],
     function () {
         // Route::resource('supplier', SupplierController::class);
+        Route::resource('gudang', GudangController::class);
         Route::resource('user', UsersController::class);
         Route::get('/profile/{id}', [UsersController::class, 'profile'])->name('user.profile');
         Route::patch('/update_profile/{id}', [UsersController::class, 'update_profile'])->name('user.update_profile');

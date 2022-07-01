@@ -16,7 +16,7 @@ class ReportController extends Controller
 
     public function penerimaan(Request $request)
     {
-        if ($request->kode_receive or $request->id_vendor  or $request->start or $request->end or $request->status) {
+        if ($request->kode_receive or $request->start or $request->end or $request->status) {
             $matchThese = [];
             if ($request->kode_receive) {
                 $kode_receive = array('kode_receive' => $request->kode_receive);
@@ -24,19 +24,13 @@ class ReportController extends Controller
             } else {
                 $kode_receive = array();
             }
-            if ($request->id_vendor) {
-                $id_vendor = array('id_vendor' => $request->id_vendor);
-                array_push($matchThese, $id_vendor);
-            } else {
-                $id_vendor = array();
-            }
             if ($request->status) {
                 $status = array('status' => $request->status);
                 array_push($matchThese, $status);
             } else {
                 $status = array();
             }
-            $matchThese = $kode_receive + $id_vendor + $status;
+            $matchThese = $kode_receive + $status;
             if ($request->start) {
                 $start = preg_replace("/(\d+)\D+(\d+)\D+(\d+)/", "$3-$1-$2", $request->start);
                 $end = preg_replace("/(\d+)\D+(\d+)\D+(\d+)/", "$3-$1-$2", $request->end);
@@ -51,7 +45,6 @@ class ReportController extends Controller
             'menu' => $this->menu,
             'title' => 'list',
             'list' => $item,
-            'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'status' => ['Pembuatan Request', 'Proses Request', 'Selesai'],
         ];
         return view('report.penerimaan')->with($data);

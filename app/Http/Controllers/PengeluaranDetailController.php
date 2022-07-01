@@ -115,7 +115,8 @@ class PengeluaranDetailController extends Controller
                 AlertHelper::addStock(false);
                 return back();
             }
-            PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->where('id_item', $request->item)->update(['id_rak' => $request->rak, 'qty_acc' => $request->qty]);
+            PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->where('id_item', $request->item)
+                ->update(['id_rak' => $request->rak, 'qty_acc' => $request->qty]);
             DB::commit();
             AlertHelper::updateAlert(true);
             return back();

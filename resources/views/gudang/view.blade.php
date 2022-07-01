@@ -25,8 +25,7 @@
                                 <div class="form-group mb-0">
                                     <label class="my-2 pb-1">Lokasi Gudang</label>
                                     <input type="text" class="form-control" name="lokasi" disabled
-                                        value="{{ $item->gudang ? $item->gudang->gudang : '' }}"
-                                        placeholder="Lokasi Gudang" />
+                                        value="{{ $item->lokasi }}" placeholder="Lokasi Gudang" />
                                     {!! $errors->first('lokasi', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">

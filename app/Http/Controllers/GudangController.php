@@ -4,16 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Helper\AlertHelper;
 use App\Models\GudangModel;
-use App\Models\InventoryModel;
-use App\Models\ItemModel;
-use App\Models\RakModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
-class RakController extends Controller
+class GudangController extends Controller
 {
-    protected $menu = 'rak';
+    protected $menu = 'gudang';
 
     /**
      * Display a listing of the resource.
@@ -22,13 +19,13 @@ class RakController extends Controller
      */
     public function index()
     {
-        $item = RakModel::orderBy('id', 'DESC')->get();
+        $gudang = GudangModel::orderBy('id', 'DESC')->get();
         $data = [
             'menu' => $this->menu,
             'title' => 'list',
-            'list' => $item,
+            'list' => $gudang
         ];
-        return view('rak.list')->with($data);
+        return view('gudang.list')->with($data);
     }
 
     /**
@@ -41,10 +38,8 @@ class RakController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'add',
-            'items' => ItemModel::all(),
-            'gudang' => GudangModel::all(),
         ];
-        return view('rak.add')->with($data);
+        return view('gudang.add')->with($data);
     }
 
     /**
@@ -55,23 +50,17 @@ class RakController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'no_rak' => 'required|max:64|unique:rak,no_rak,NULL,id,deleted_at,NULL',
-            'keterangan' => 'required|max:128',
-            'id_gudang' => 'required',
-            'id_item' => 'required',
+        $validated = $request->validate([
+            'gudang' => 'required|max:64|unique:gudang,gudang,NULL,id,deleted_at,NULL',
         ]);
         DB::beginTransaction();
         try {
-            $item = new RakModel();
-            $item->no_rak = $request->no_rak;
-            $item->id_gudang = $request->id_gudang;
-            $item->keterangan = $request->keterangan;
-            $item->id_item = $request->id_item;
-            $item->save();
+            gudangModel::create([
+                'gudang' => $validated['gudang'],
+            ]);
             DB::commit();
             AlertHelper::addAlert(true);
-            return redirect('rak');
+            return redirect('gudang');
         } catch (\Throwable $err) {
             DB::rollBack();
             throw $err;
@@ -88,12 +77,6 @@ class RakController extends Controller
      */
     public function show($id)
     {
-        $data = [
-            'menu' => $this->menu,
-            'title' => 'view',
-            'item' => RakModel::findorfail(Crypt::decryptString($id)),
-        ];
-        return view('rak.view')->with($data);
     }
 
     /**
@@ -107,11 +90,9 @@ class RakController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'edit',
-            'item' => RakModel::findorfail(Crypt::decryptString($id)),
-            'items' => ItemModel::all(),
-            'gudang' => GudangModel::all(),
+            'item' => gudangModel::findorfail(Crypt::decryptString($id))
         ];
-        return view('rak.edit')->with($data);
+        return view('gudang.edit')->with($data);
     }
 
     /**
@@ -124,23 +105,18 @@ class RakController extends Controller
     public function update(Request $request, $id)
     {
         $decrypted_id = Crypt::decryptString($id);
-        $request->validate([
-            'no_rak' => "required|max:64|unique:rak,no_rak,$decrypted_id,id,deleted_at,NULL",
-            'keterangan' => 'required|max:128',
-            'id_gudang' => 'required',
-            'id_item' => 'required',
+        $validated = $request->validate([
+            'gudang' => "required|max:64|unique:gudang,gudang,$decrypted_id,id,deleted_at,NULL",
         ]);
+
         DB::beginTransaction();
         try {
-            $item = RakModel::findOrFail($decrypted_id);
-            $item->no_rak = $request->no_rak;
-            $item->keterangan = $request->keterangan;
-            $item->id_gudang = $request->id_gudang;
-            $item->id_item = $request->id_item;
-            $item->save();
+            $vendor = gudangModel::findOrFail($decrypted_id);
+            $vendor->gudang = $validated['gudang'];
+            $vendor->save();
             DB::commit();
             AlertHelper::updateAlert(true);
-            return redirect('rak');
+            return redirect('gudang');
         } catch (\Throwable $err) {
             DB::rollBack();
             AlertHelper::updateAlert(false);
@@ -158,8 +134,8 @@ class RakController extends Controller
     {
         DB::beginTransaction();
         try {
-            $item = RakModel::findOrFail(Crypt::decryptString($id));
-            $item->delete();
+            $vendor = gudangModel::findOrFail(Crypt::decryptString($id));
+            $vendor->delete();
             DB::commit();
             AlertHelper::deleteAlert(true);
             return back();
@@ -168,16 +144,5 @@ class RakController extends Controller
             AlertHelper::deleteAlert(false);
             return back();
         }
-    }
-
-    public function stock_rak($id)
-    {
-        $item = InventoryModel::where('id_rak', Crypt::decryptString($id))->orderBy('id', 'ASC')->get();
-        $data = [
-            'menu' => $this->menu,
-            'title' => 'stock',
-            'list' => $item,
-        ];
-        return view('item.stock')->with($data);
     }
 }

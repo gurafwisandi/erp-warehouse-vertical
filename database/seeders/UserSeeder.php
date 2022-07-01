@@ -16,9 +16,9 @@ class UserSeeder extends Seeder
     {
         $user = [
             [
-                'name' => 'Purchasing',
-                'email' => 'purchasing@gmail.com',
-                'roles' => 'Purchasing',
+                'name' => 'Produksi',
+                'email' => 'produksi@gmail.com',
+                'roles' => 'Produksi',
                 'password' => bcrypt('12345'),
                 'status' => 'Aktif',
             ],

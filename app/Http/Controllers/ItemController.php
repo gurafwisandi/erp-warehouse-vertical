@@ -206,8 +206,9 @@ class ItemController extends Controller
     public function dropdown_receive(Request $request)
     {
         $item = DB::table('rak')
-            ->select('rak.*', 'inventory.qty as qty_stok')
+            ->select('rak.*', 'inventory.qty as qty_stok', 'gudang')
             ->join('item', 'item.id', '=', 'rak.id_item')
+            ->join('gudang', 'gudang.id', '=', 'rak.id_gudang')
             ->leftJoin("inventory", function ($join) {
                 $join->on("inventory.id_rak", "=", "rak.id")
                     ->on("inventory.id_item", "=", "item.id");
@@ -232,10 +233,11 @@ class ItemController extends Controller
     public function dropdown_rak(Request $request)
     {
         $item = DB::table('inventory')
-            ->select('rak.*', 'inventory.id as id_inventory')
+            ->select('rak.*', 'inventory.id as id_inventory', 'gudang')
             ->selectRaw('sum(inventory.qty) as qty')
             ->selectRaw('sum(inventory.qty_out) as qty_out')
             ->join('rak', 'rak.id', '=', 'inventory.id_rak')
+            ->join('gudang', 'gudang.id', '=', 'rak.id_gudang')
             ->wherenull('inventory.deleted_at')
             ->where('inventory.id_item', '=', $request->item)
             ->groupBy('inventory.id_rak')

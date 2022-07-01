@@ -16,4 +16,9 @@ class RakModel extends Model
     {
         return $this->belongsTo(ItemModel::class, 'id_item');
     }
+
+    public function gudang()
+    {
+        return $this->belongsTo(GudangModel::class, 'id_gudang');
+    }
 }

@@ -28,6 +28,12 @@
                     </a>
                 </li>
                 <li class="has-submenu ">
+                    <a href="{{ route('gudang.index') }}" {{ Request::segment(1) == 'gudang' ? 'active' : '' }}">
+                        <i class="typcn typcn-flag"></i>
+                        <span> Gudang</span>
+                    </a>
+                </li>
+                <li class="has-submenu ">
                     <a href="{{ route('rak.index') }}" {{ Request::segment(1) == 'rak' ? 'active' : '' }}">
                         <i class="typcn typcn-dropbox"></i>
                         <span> Rak</span>

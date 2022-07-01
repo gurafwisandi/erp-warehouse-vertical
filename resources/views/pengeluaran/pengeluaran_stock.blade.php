@@ -222,7 +222,7 @@
                         $.each(response, function(i, rak) {
                             let hasil = rak.qty - rak.qty_out;
                             $('.rak').append(
-                                `<option value="${rak.id}">${rak.no_rak+' = stock '+hasil}</option>`
+                                `<option value="${rak.id}">${rak.gudang+' - '+rak.no_rak+' = stock '+hasil}</option>`
                             )
                         })
                     },

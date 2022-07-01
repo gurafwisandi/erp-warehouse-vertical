@@ -51,8 +51,8 @@
                                     <label class="my-2 py-1">Roles</label>
                                     <select class="form-control mb-3 custom-select" name="roles" required>
                                         <option value="">--Pilih Status--</option>
-                                        <option value="Purchasing" {{ $item->roles == 'Purchasing' ? 'selected' : '' }}>
-                                            Purchasing
+                                        <option value="Produksi" {{ $item->roles == 'Produksi' ? 'selected' : '' }}>
+                                            Produksi
                                         </option>
                                         <option value="Sales" {{ $item->roles == 'Sales' ? 'selected' : '' }}>
                                             Sales</option>

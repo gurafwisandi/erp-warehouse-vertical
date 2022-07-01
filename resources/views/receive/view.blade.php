@@ -44,23 +44,6 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 py-1">Vendor</label>
-                                            <div>
-                                                <select class=" form-control mb-3 custom-select" name="id_vendor" disabled>
-                                                    <option value="">--Pilih Vendor--</option>
-                                                    @foreach ($vendor as $vendor)
-                                                        <option value="{{ $vendor->id }}"
-                                                            {{ $item->id_vendor == $vendor->id ? 'selected' : '' }}>
-                                                            {{ $vendor->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            {!! $errors->first('id_vendor', '<div class="invalid-validasi">:message</div>') !!}
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group mb-0">
                                             <label class="my-2 py-1">Keterangan</label>
                                             <div>
                                                 <textarea name="keterangan" class="form-control" rows="5" disabled placeholder="Keterangan">{{ $item->keterangan }}</textarea>
@@ -121,7 +104,8 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $inven->items->nama . ' - ' . $inven->items->panjang . 'm' }}
                                                     </td>
-                                                    <td>{{ $inven->raks->no_rak . ' - ' . $inven->raks->lokasi }}</td>
+                                                    <td>{{ $inven->raks->gudang->gudang . ' - ' . $inven->raks->no_rak }}
+                                                    </td>
                                                     <td>{{ $inven->qty . ' ' . $inven->items->satuan }}</td>
                                                     <td>{{ $inven->tgl_masuk_gudang }}</td>
                                                 </tr>

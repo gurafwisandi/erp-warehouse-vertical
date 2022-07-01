@@ -48,7 +48,7 @@
                                     <div>
                                         <select class=" form-control custom-select" name="roles" required>
                                             <option value="">--Pilih Roles--</option>
-                                            <option value="Purchasing">Purchasing</option>
+                                            <option value="Produksi">Produksi</option>
                                             <option value="Sales">Sales</option>
                                             <option value="Gudang">Gudang</option>
                                         </select>

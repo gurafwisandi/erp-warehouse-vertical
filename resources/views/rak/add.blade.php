@@ -21,17 +21,25 @@
                         <div class="card-body">
                             <form action="{{ route('rak.store') }}" method="POST">
                                 @csrf
+                                <div class="form-group">
+                                    <label class="my-2 py-1">Lokasi Gudang</label>
+                                    <div>
+                                        <select class="form-control mb-3 custom-select" name="id_gudang" required>
+                                            <option value="">--Pilih Item--</option>
+                                            @foreach ($gudang as $data_gudang)
+                                                <option value="{{ $data_gudang->id }}">
+                                                    {{ $data_gudang->gudang }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    {!! $errors->first('id_gudang', '<div class="invalid-validasi">:message</div>') !!}
+                                </div>
                                 <div class="form-group mb-0">
                                     <label class="my-2 pb-1">No Rak</label>
                                     <input type="text" class="form-control" name="no_rak" required
                                         value="{{ old('no_rak') }}" placeholder="No Rak" />
                                     {!! $errors->first('no_rak', '<div class="invalid-validasi">:message</div>') !!}
-                                </div>
-                                <div class="form-group mb-0">
-                                    <label class="my-2 pb-1">Lokasi</label>
-                                    <input type="text" class="form-control" name="lokasi" required
-                                        value="{{ old('lokasi') }}" placeholder="Lokasi" />
-                                    {!! $errors->first('lokasi', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
                                 <div class="form-group mb-0">
                                     <label class="my-2 py-1">Keterangan</label>

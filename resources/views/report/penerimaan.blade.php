@@ -49,25 +49,6 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="my-2 py-1">Vendor</label>
-                                        <div class="form-group mb-0">
-                                            <div>
-                                                <select class=" form-control mb-3 custom-select" name="id_vendor">
-                                                    <option value="">--Pilih Vendor--</option>
-                                                    @foreach ($vendor as $item)
-                                                        <option value="{{ $item->id }}"<?php
-                                                        if (isset($_GET['id_vendor']) and $_GET['id_vendor'] != '' and $item->id == $_GET['id_vendor']) {
-                                                            echo 'selected';
-                                                        }
-                                                        ?>>
-                                                            {{ $item->nama }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
                                         <label class="my-2 py-1">Status</label>
                                         <div class="form-group mb-0">
                                             <div>
@@ -106,7 +87,6 @@
                                         <th>Kode Receive</th>
                                         <th>Tgl</th>
                                         <th>Keterangan</th>
-                                        <th>Vendor</th>
                                         <th>User Input</th>
                                         <th>Status</th>
                                         <th>Item</th>
@@ -119,7 +99,6 @@
                                             <td>{{ $item->kode_receive }}</td>
                                             <td>{{ $item->tgl_receive }}</td>
                                             <td>{{ $item->keterangan }}</td>
-                                            <td>{{ $item->vendors->nama }}</td>
                                             <td>{{ $item->users->name }}</td>
                                             <td>
                                                 @if ($item->status == 'Selesai')

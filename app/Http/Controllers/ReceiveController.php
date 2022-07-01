@@ -213,7 +213,6 @@ class ReceiveController extends Controller
         $data = [
             'menu' => $this->menu,
             'title' => 'penempatan',
-            'vendor' => SupplierModel::orderBy('nama', 'ASC')->get(),
             'item' => ReceiveModel::findorfail(Crypt::decryptString($id)),
             'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->get(),
             'invens' => InventoryModel::where('id_receive', Crypt::decryptString($id))->get(),

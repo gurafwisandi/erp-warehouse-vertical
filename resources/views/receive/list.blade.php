@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            @if (Auth::user()->roles == 'Purchasing')
+                            @if (Auth::user()->roles == 'Produksi')
                                 <p class="text-muted mb-4 font-14">
                                     <a class="btn btn-success" href="{{ route('receive.create') }}">Tambah</a>
                                 </p>
