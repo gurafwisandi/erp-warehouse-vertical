@@ -19,11 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            @if (Auth::user()->roles == 'Sales')
-                                <?php $readonly = ''; ?>
-                            @else
-                                <?php $readonly = 'readonly'; ?>
-                            @endif
+                            <?php $readonly = 'required'; ?>
                             <form action="{{ route('pengeluaran.update', Crypt::encryptString($header->id)) }}"
                                 method="POST">
                                 @csrf
@@ -56,6 +52,23 @@
                                                 <textarea name="keterangan" class="form-control" rows="5" {{ $readonly }} required placeholder="Keterangan">{{ $header->keterangan }}</textarea>
                                                 {!! $errors->first('keterangan', '<div class="invalid-validasi">:message</div>') !!}
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-0">
+                                            <label class="my-2 py-1">Sales</label>
+                                            <div>
+                                                <select class="form-control mb-3 custom-select" name="id_user" required>
+                                                    <option value="">--Pilih Sales--</option>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->id }}"
+                                                            {{ $user->id == $header->id_user ? 'selected' : '' }}>
+                                                            {{ $user->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            {!! $errors->first('id_user', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                 </div><br>

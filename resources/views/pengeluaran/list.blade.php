@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            @if (Auth::user()->roles == 'Sales')
+                            @if (Auth::user()->roles == 'Gudang')
                                 <p class="text-muted mb-4 font-14">
                                     <a class="btn btn-success" href="{{ route('pengeluaran.create') }}">Tambah</a>
                                 </p>
@@ -31,7 +31,7 @@
                                         <th>Kode Pengeluaran</th>
                                         <th>Tgl</th>
                                         <th>Keterangan</th>
-                                        <th>User Input</th>
+                                        <th>Sales</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -57,36 +57,38 @@
                                                 <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                                     <div class="btn-group btn-group-sm" style="float: none;">
                                                         <?php $id = Crypt::encryptString($item->id); ?>
-                                                        <form class="delete-form"
-                                                            action="{{ route('pengeluaran.destroy', $id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <a href="{{ route('pengeluaran.show', $id) }}"
-                                                                class="tabledit-edit-button btn btn-sm btn-primary"
-                                                                style="float: none; margin: 5px;">
-                                                                <span class="ti-eye"></span>
-                                                            </a>
-                                                            @if ($item->status == 'Proses Permintaan')
-                                                                <button type="button"
-                                                                    class="tabledit-delete-button btn btn-sm btn-danger delete_confirm"
+                                                        @if (Auth::user()->roles == 'Gudang')
+                                                            <form class="delete-form"
+                                                                action="{{ route('pengeluaran.destroy', $id) }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <a href="{{ route('pengeluaran.show', $id) }}"
+                                                                    class="tabledit-edit-button btn btn-sm btn-primary"
                                                                     style="float: none; margin: 5px;">
-                                                                    <span class="ti-trash"></span>
-                                                                </button>
-                                                                <a href="{{ route('pengeluaran.edit', $id) }}"
-                                                                    class="tabledit-edit-button btn btn-sm btn-info"
-                                                                    style="float: none; margin: 5px;">
-                                                                    <span class="ti-pencil"></span>
+                                                                    <span class="ti-eye"></span>
                                                                 </a>
-                                                            @endif
-                                                            @if ($item->status == 'Pengajuan ke Gudang' and Auth::user()->roles == 'Gudang')
-                                                                <a href="{{ route('pengeluaran.acceptance', $id) }}"
-                                                                    class="tabledit-edit-button btn btn-sm btn-secondary"
-                                                                    style="float: none; margin: 5px;">
-                                                                    <span class="ti-package"></span>
-                                                                </a>
-                                                            @endif
-                                                        </form>
+                                                                @if ($item->status == 'Proses Permintaan')
+                                                                    <button type="button"
+                                                                        class="tabledit-delete-button btn btn-sm btn-danger delete_confirm"
+                                                                        style="float: none; margin: 5px;">
+                                                                        <span class="ti-trash"></span>
+                                                                    </button>
+                                                                    <a href="{{ route('pengeluaran.edit', $id) }}"
+                                                                        class="tabledit-edit-button btn btn-sm btn-info"
+                                                                        style="float: none; margin: 5px;">
+                                                                        <span class="ti-pencil"></span>
+                                                                    </a>
+                                                                @endif
+                                                                @if ($item->status == 'Pengajuan ke Gudang' and Auth::user()->roles == 'Gudang')
+                                                                    <a href="{{ route('pengeluaran.acceptance', $id) }}"
+                                                                        class="tabledit-edit-button btn btn-sm btn-secondary"
+                                                                        style="float: none; margin: 5px;">
+                                                                        <span class="ti-package"></span>
+                                                                    </a>
+                                                                @endif
+                                                            </form>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </td>

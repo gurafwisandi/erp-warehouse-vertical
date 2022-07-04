@@ -7,6 +7,7 @@ use App\Models\InventoryModel;
 use App\Models\ItemModel;
 use App\Models\PengeluaranDetailModel;
 use App\Models\PengeluaranModel;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,11 @@ class PengeluaranController extends Controller
      */
     public function index()
     {
-        $item = PengeluaranModel::orderBy('id', 'DESC')->get();
+        if (Auth::user()->roles == 'Sales') {
+            $item = PengeluaranModel::where('id_user', Auth::user()->id)->orderBy('id', 'DESC')->get();
+        } else {
+            $item = PengeluaranModel::orderBy('id', 'DESC')->get();
+        }
         $data = [
             'menu' => $this->menu,
             'title' => 'list',
@@ -53,6 +58,7 @@ class PengeluaranController extends Controller
             'menu' => $this->menu,
             'title' => 'add',
             'kode_pengeluaran' => $generate_registration_number,
+            'users' => User::where('roles', 'Sales')->get()
         ];
         return view('pengeluaran.add')->with($data);
     }
@@ -68,6 +74,7 @@ class PengeluaranController extends Controller
         $request->validate([
             'kode_pengeluaran' => 'required|max:64|unique:pengeluaran,kode_pengeluaran,NULL,id,deleted_at,NULL',
             'tgl_pengeluaran' => 'required',
+            'id_user' => 'required',
             'keterangan' => 'max:128',
         ]);
         DB::beginTransaction();
@@ -77,7 +84,7 @@ class PengeluaranController extends Controller
             $pengeluaran->tgl_pengeluaran = $request->tgl_pengeluaran;
             $pengeluaran->keterangan = $request->keterangan;
             $pengeluaran->status = 'Proses Permintaan';
-            $pengeluaran->id_user = Auth::user()->id;
+            $pengeluaran->id_user = $request->id_user;
             $pengeluaran->save();
             $insertedId = Crypt::encryptString($pengeluaran->id);
             DB::commit();
@@ -122,6 +129,7 @@ class PengeluaranController extends Controller
             'menu' => $this->menu,
             'title' => 'penerimaan',
             'item' => ItemModel::all(),
+            'users' => User::where('roles', 'Sales')->get(),
             'header' => PengeluaranModel::findorfail(Crypt::decryptString($id)),
             'details' => PengeluaranDetailModel::where('id_pengeluaran', Crypt::decryptString($id))->get(),
         ];
@@ -148,6 +156,7 @@ class PengeluaranController extends Controller
             $pengeluaran->kode_pengeluaran = $request->kode_pengeluaran;
             $pengeluaran->tgl_pengeluaran = $request->tgl_pengeluaran;
             $pengeluaran->keterangan = $request->keterangan;
+            $pengeluaran->id_user = $request->id_user;
             $pengeluaran->save();
             $insertedId = Crypt::encryptString($request->id);
             DB::commit();
