@@ -49,6 +49,22 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group mb-0">
+                                            <label class="my-2 py-1">Sales</label>
+                                            <div>
+                                                <select class="form-control mb-3 custom-select" name="id_user" required>
+                                                    <option value="">--Pilih Sales--</option>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{ $user->id }}">
+                                                            {{ $user->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            {!! $errors->first('id_user', '<div class="invalid-validasi">:message</div>') !!}
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="my-2 pb-1">
                                 </div>

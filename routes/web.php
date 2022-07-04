@@ -42,7 +42,6 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('aut
 Route::group(
     ['middleware' => 'auth'],
     function () {
-        // Route::resource('supplier', SupplierController::class);
         Route::resource('gudang', GudangController::class);
         Route::resource('user', UsersController::class);
         Route::get('/profile/{id}', [UsersController::class, 'profile'])->name('user.profile');
@@ -50,7 +49,6 @@ Route::group(
         Route::resource('item', ItemController::class);
         Route::get('/stock/{id}', [ItemController::class, 'stock'])->name('item.stock');
         Route::post('/dropdown', [ItemController::class, 'dropdown'])->name('item.dropdown');
-        // Route::post('/dropdown_pengeluaran', [ItemController::class, 'dropdown_pengeluaran'])->name('item.dropdown_pengeluaran');
         Route::post('/dropdown_rak', [ItemController::class, 'dropdown_rak'])->name('item.dropdown_rak');
         Route::resource('rak', RakController::class);
         Route::get('/stock_rak/{id}', [RakController::class, 'stock_rak'])->name('rak.stock_rak');

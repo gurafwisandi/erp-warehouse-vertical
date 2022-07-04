@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GudangModel;
 use App\Models\ItemModel;
 use App\Models\PengeluaranModel;
 use App\Models\RakModel;
@@ -25,6 +26,7 @@ class DashboardController extends Controller
             'users' => User::count(),
             'items' => ItemModel::count(),
             'rak' => RakModel::count(),
+            'gudang' => GudangModel::count(),
             'penerimaan' => ReceiveModel::where('status', 'Selesai Penerimaan')->count(),
             'pengeluaran' => PengeluaranModel::where('status', 'Selesai Permintaan')->count(),
         ];
