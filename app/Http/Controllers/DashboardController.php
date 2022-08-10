@@ -25,6 +25,7 @@ class DashboardController extends Controller
             'label' => 'dashboard',
             'users' => User::count(),
             'items' => ItemModel::count(),
+            'gudang' => GudangModel::count(),
             'rak' => RakModel::count(),
             'gudang' => GudangModel::count(),
             'penerimaan' => ReceiveModel::where('status', 'Selesai Penerimaan')->count(),
