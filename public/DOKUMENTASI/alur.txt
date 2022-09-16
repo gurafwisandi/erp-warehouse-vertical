@@ -47,3 +47,20 @@ Bagian Sales marketing
 *Input permintaan tanggal pengeluaran = DONE
 *Input qty Produk/Item = DONE
 *Input data Customer
+
+
+#alur
+1. tambah penyerahan oleh PRODUKSI
+-tgl penyerahan, keterangan
+-pilih item, qty, tgl produksi
+-approve
+2. penerimaan oleh GUDANG
+-pilih item, rak, tgl masuk gudang, qty
+-approve
+3. input pengeluaran oleh SALES
+-tgl pengeluaran, keterangan, sales
+-pilih item, qty
+-approve
+4. pengeluarn oleh GUDANG
+-pilih item, rak, qty
+-approve

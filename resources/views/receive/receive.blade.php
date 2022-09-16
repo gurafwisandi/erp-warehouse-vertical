@@ -240,13 +240,17 @@
                         item,
                     },
                     success: response => {
-                        console.log(response)
                         $('.rak').append(`<option value="">-- Pilih Rak --</option>`)
-                        $.each(response, function(i, item) {
-                            $('.rak').append(
-                                `<option value="${item.id}">${item.gudang+' - '+item.no_rak+' = stock ['+item.qty_stok+']'}</option>`
-                            )
-                        })
+                        if (response) {
+                            $.each(response, function(i, item) {
+                                if (item.no_rak != null) {
+                                    $('.rak').append(
+                                        `<option value="${item.id}">${item.gudang+' - '+item.no_rak+' = stock ['+item.qty_stok+']'}</option>`
+                                    )
+                                }
+                            })
+
+                        }
                     },
                     error: (err) => {
                         console.log(err);
