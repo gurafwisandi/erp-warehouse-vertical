@@ -54,6 +54,7 @@ class ReceiveDetailController extends Controller
             $receive->id_receive = $request->id_receive;
             $receive->id_item = $request->id_item;
             $receive->qty = $request->qty;
+            $receive->tgl_produksi = $request->tgl_produksi;
             $receive->save();
             $insertedId = Crypt::encryptString($request->id_receive);
             DB::commit();

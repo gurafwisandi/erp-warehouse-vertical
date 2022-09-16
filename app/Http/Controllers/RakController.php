@@ -56,7 +56,7 @@ class RakController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'no_rak' => 'required|max:64|unique:rak,no_rak,NULL,id,deleted_at,NULL',
+            'no_rak' => 'required|max:64',
             'keterangan' => 'required|max:128',
             'id_gudang' => 'required',
             'id_item' => 'required',
@@ -125,7 +125,7 @@ class RakController extends Controller
     {
         $decrypted_id = Crypt::decryptString($id);
         $request->validate([
-            'no_rak' => "required|max:64|unique:rak,no_rak,$decrypted_id,id,deleted_at,NULL",
+            'no_rak' => "required|max:64",
             'keterangan' => 'required|max:128',
             'id_gudang' => 'required',
             'id_item' => 'required',

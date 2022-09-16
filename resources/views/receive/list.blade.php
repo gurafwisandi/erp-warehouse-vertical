@@ -28,7 +28,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Kode Penerimaan</th>
+                                        <th>Kode Penyerahan/Penerimaan</th>
                                         <th>Tgl</th>
                                         <th>Keterangan</th>
                                         <th>User Input</th>
@@ -48,9 +48,9 @@
                                                 @if ($item->status == 'Selesai')
                                                     <span class="badge badge-success">{{ $item->status }}</span>
                                                 @elseif($item->status == 'Proses Request')
-                                                    <span class="badge badge-warning">{{ $item->status }}</span>
+                                                    <span class="badge badge-warning">Proses Penyerahan</span>
                                                 @elseif($item->status == 'Pembuatan Request')
-                                                    <span class="badge badge-secondary">{{ $item->status }}</span>
+                                                    <span class="badge badge-secondary">Pembuatan Penyerahan</span>
                                                 @endif
                                             </td>
                                             <td>
@@ -67,7 +67,7 @@
                                                                 <span class="ti-eye"></span>
                                                             </a>
                                                             @if ($item->status == 'Pembuatan Request')
-                                                                @if (Auth::user()->roles == 'Purchasing')
+                                                                @if (Auth::user()->roles == 'Produksi')
                                                                     <button type="button"
                                                                         class="tabledit-delete-button btn btn-sm btn-danger delete_confirm"
                                                                         style="float: none; margin: 5px;">

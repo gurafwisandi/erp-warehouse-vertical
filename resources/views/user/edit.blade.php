@@ -51,13 +51,14 @@
                                     <label class="my-2 py-1">Roles</label>
                                     <select class="form-control mb-3 custom-select" name="roles" required>
                                         <option value="">--Pilih Status--</option>
-                                        <option value="Produksi" {{ $item->roles == 'Produksi' ? 'selected' : '' }}>
-                                            Produksi
+                                        <option value="Admin" {{ $item->roles == 'Admin' ? 'selected' : '' }}>Admin
                                         </option>
-                                        <option value="Sales" {{ $item->roles == 'Sales' ? 'selected' : '' }}>
-                                            Sales</option>
-                                        <option value="Gudang" {{ $item->roles == 'Gudang' ? 'selected' : '' }}>
-                                            Gudang</option>
+                                        <option value="Produksi" {{ $item->roles == 'Produksi' ? 'selected' : '' }}>Produksi
+                                        </option>
+                                        <option value="Sales" {{ $item->roles == 'Sales' ? 'selected' : '' }}>Sales
+                                        </option>
+                                        <option value="Gudang" {{ $item->roles == 'Gudang' ? 'selected' : '' }}>Gudang
+                                        </option>
                                     </select>
                                     {!! $errors->first('roles', '<div class="invalid-validasi">:message</div>') !!}
                                 </div>
@@ -67,8 +68,7 @@
                                         <option value="">--Pilih Status--</option>
                                         <option value="Aktif" {{ $item->status == 'Aktif' ? 'selected' : '' }}>Aktif
                                         </option>
-                                        <option value="Tidak Aktif"
-                                            {{ $item->status == 'Tidak Aktif' ? 'selected' : '' }}>
+                                        <option value="Tidak Aktif" {{ $item->status == 'Tidak Aktif' ? 'selected' : '' }}>
                                             Tidak Aktif</option>
                                     </select>
                                     {!! $errors->first('status', '<div class="invalid-validasi">:message</div>') !!}

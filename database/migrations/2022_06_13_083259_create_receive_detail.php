@@ -21,6 +21,7 @@ class CreateReceiveDetail extends Migration
             $table->foreign('id_item')->references('id')->on('item');
             $table->double('qty')->nullable();
             $table->double('qty_terima')->nullable();
+            $table->date('tgl_produksi')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

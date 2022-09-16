@@ -29,8 +29,10 @@
                                             ?>
                                             <?php
                                             $stock = DB::table('inventory')
-                                                ->selectraw('sum(qty) as qty_in')
-                                                ->selectraw('sum(qty_out) as qty_out')
+                                                ->selectraw("sum(CASE WHEN receive.status = 'Selesai' THEN qty else 0 end) as qty_in")
+                                                ->selectraw("sum(CASE WHEN pengeluaran.status = 'Selesai' THEN qty_out else 0 end) as qty_out")
+                                                ->join('receive', 'receive.id', '=', 'inventory.id_receive', 'left')
+                                                ->join('pengeluaran', 'pengeluaran.id', '=', 'inventory.id_pengeluaran', 'left')
                                                 ->where('id_rak', $list[0]->id_rak)
                                                 ->get();
                                             $count = $stock[0]->qty_in - $stock[0]->qty_out;
@@ -62,8 +64,9 @@
                                         <th>Kode Transaksi</th>
                                         <th>Tgl Masuk Gudang</th>
                                         <th>Nama</th>
-                                        <th>Panjang</th>
+                                        <th>Jenis</th>
                                         <th>Qty</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,6 +88,13 @@
                                                     {{ $item->qty . ' ' . $item->items->satuan }}
                                                 @else
                                                     {{ $item->qty_out . ' ' . $item->items->satuan }}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if ($item->status_inventory == 'IN')
+                                                    {{ $item->receive->status }}
+                                                @else
+                                                    {{ $item->pengeluaran->status }}
                                                 @endif
                                             </td>
                                         </tr>

@@ -206,7 +206,8 @@ class ItemController extends Controller
     public function dropdown_receive(Request $request)
     {
         $item = DB::table('rak')
-            ->select('rak.*', 'inventory.qty as qty_stok', 'gudang')
+            ->select('rak.*', 'gudang')
+            ->selectRaw('sum(inventory.qty) - sum(inventory.qty_out) as qty_stok')
             ->join('item', 'item.id', '=', 'rak.id_item')
             ->join('gudang', 'gudang.id', '=', 'rak.id_gudang')
             ->leftJoin("inventory", function ($join) {
@@ -234,15 +235,17 @@ class ItemController extends Controller
     {
         $item = DB::table('inventory')
             ->select('rak.*', 'inventory.id as id_inventory', 'gudang')
-            ->selectRaw('sum(inventory.qty) as qty')
-            ->selectRaw('sum(inventory.qty_out) as qty_out')
+            ->selectRaw("sum(CASE WHEN receive.status = 'Selesai' THEN inventory.qty else 0 end) as qty")
+            ->selectRaw("sum(CASE WHEN pengeluaran.status = 'Selesai' THEN inventory.qty_out else 0 end) as qty_out")
             ->join('rak', 'rak.id', '=', 'inventory.id_rak')
             ->join('gudang', 'gudang.id', '=', 'rak.id_gudang')
+            ->join('receive', 'receive.id', '=', 'inventory.id_receive', 'left')
+            ->join('pengeluaran', 'pengeluaran.id', '=', 'inventory.id_pengeluaran', 'left')
             ->wherenull('inventory.deleted_at')
             ->where('inventory.id_item', '=', $request->item)
             ->groupBy('inventory.id_rak')
             ->groupBy('inventory.id_item')
-            ->havingRaw("sum(inventory.qty) != sum(inventory.qty_out)")
+            ->havingRaw("sum(CASE WHEN receive.status = 'Selesai' THEN inventory.qty else 0 end) != sum(CASE WHEN pengeluaran.status = 'Selesai' THEN inventory.qty_out else 0 end)")
             ->orderBy('rak.id', 'ASC')
             ->get();
         return $item;

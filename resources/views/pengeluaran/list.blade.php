@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            @if (Auth::user()->roles == 'Gudang')
+                            @if (Auth::user()->roles == 'Sales')
                                 <p class="text-muted mb-4 font-14">
                                     <a class="btn btn-success" href="{{ route('pengeluaran.create') }}">Tambah</a>
                                 </p>
@@ -57,7 +57,7 @@
                                                 <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                                     <div class="btn-group btn-group-sm" style="float: none;">
                                                         <?php $id = Crypt::encryptString($item->id); ?>
-                                                        @if (Auth::user()->roles == 'Gudang')
+                                                        @if (Auth::user()->roles == 'Sales' or Auth::user()->roles == 'Gudang')
                                                             <form class="delete-form"
                                                                 action="{{ route('pengeluaran.destroy', $id) }}"
                                                                 method="POST">
@@ -68,7 +68,7 @@
                                                                     style="float: none; margin: 5px;">
                                                                     <span class="ti-eye"></span>
                                                                 </a>
-                                                                @if ($item->status == 'Proses Permintaan')
+                                                                @if ($item->status == 'Proses Permintaan' and Auth::user()->roles == 'Sales')
                                                                     <button type="button"
                                                                         class="tabledit-delete-button btn btn-sm btn-danger delete_confirm"
                                                                         style="float: none; margin: 5px;">

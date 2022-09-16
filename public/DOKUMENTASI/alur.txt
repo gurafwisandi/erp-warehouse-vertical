@@ -15,3 +15,35 @@
 *akun gudang
 4. pilih item digudang dan rak yang tersedia dan qty yang akan dikeluarkan berdasarkan request atau stok yg tersedia
 5. lalu klik approve (status menjadi "selesa")
+
+
+
+User bagian Admin
+- Input Data User, pada menu User (CRUD) = DONE
+- Input Data Master Produk/Item (CRUD) = DONE
+- Input Data Master Gudang (CRUD) = DONE
+- Input Data Master Rak/Item (CRUD) = DONE
+
+Bagian Produksi
+- Input Penyerahan Produk/Item ke Bagaian Gudang, di menu penyerahan = DONE
+*(data produk pilih dropdown pilih dari data master) = DONE
+* Bagian Produksi Input QTY Item = DONE
+* Bagian Produksi Input tanggal produksi = DONE
+
+Bagian Gudang
+- Menerima Penyerahan Produk/Item dari Bagian Porduksi, dengan mengkklik tombol diterima, pada menu penerimaan = DONE
+- Bagian Gudang menginput penyimpanan di gudang = DONE
+*memilih Produk/Item = DONE
+*Input qty Produk/Item = DONE
+*memilih Rak (ambil dari data master rak). = DONE
+- Bagian Gudang menginput permintaan pengeluaran barang dari sales = DONE
+*pilih item = DONE
+*pilih rak = DONE
+*input qty = DONE
+
+Bagian Sales marketing
+- Dapat melihat QTY Produk/Item yang ada di gudang = DONE
+- Menginput data pengeluaran produk/item yang ada di gudang (tidak boleh melebihi data di stock di gudang) = DONE
+*Input permintaan tanggal pengeluaran = DONE
+*Input qty Produk/Item = DONE
+*Input data Customer

@@ -18,21 +18,21 @@
                     <div class="card">
                         <div class="card-body">
                             <h4 class="page-title">{{ strtoupper($menu) }}</h4>
-                            <h6 class="page-title">Penerimaan</h6>
+                            <h6 class="page-title">Penyerahan/Penerimaan</h6>
                             <br>
                             <form>
                                 <div class="row">
                                     <div class="col-md-2">
-                                        <label class="my-2 pb-1">Kode Receive</label>
+                                        <label class="my-2 pb-1">Kode Penyerahan/Penerimaan</label>
                                         <div class="form-group mb-0">
                                             <input type="text" class="form-control" name="kode_receive"
                                                 value="<?php if (isset($_GET['kode_receive']) and $_GET['kode_receive'] != '') {
                                                     echo $_GET['kode_receive'];
-                                                } ?>" placeholder="Kode Receive" />
+                                                } ?>" placeholder="Kode Penyerahan/Penerimaan" />
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="my-2 pb-1">Tgl Receive</label>
+                                        <label class="my-2 pb-1">Tgl Penyerahan/Penerimaan</label>
                                         <div class="form-group mb-0">
                                             <div>
                                                 <div class="input-daterange input-group" id="date-range">
@@ -104,9 +104,9 @@
                                                 @if ($item->status == 'Selesai')
                                                     <span class="badge badge-success">{{ $item->status }}</span>
                                                 @elseif($item->status == 'Proses Request')
-                                                    <span class="badge badge-warning">{{ $item->status }}</span>
+                                                    <span class="badge badge-warning">Proses Penyerahan</span>
                                                 @elseif($item->status == 'Pembuatan Request')
-                                                    <span class="badge badge-secondary">{{ $item->status }}</span>
+                                                    <span class="badge badge-secondary">Pembuatan Penyerahan</span>
                                                 @endif
                                             </td>
                                             <td>

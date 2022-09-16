@@ -24,17 +24,17 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 pb-1">Kode Penerimaan</label>
+                                            <label class="my-2 pb-1">Kode Penyerahan</label>
                                             <input type="text" class="form-control" name="kode_receive" readonly
-                                                value="{{ $kode_receive }}" placeholder="Kode Penerimaan" />
+                                                value="{{ $kode_receive }}" placeholder="Kode Penyerahan" />
                                             {!! $errors->first('kode_receive', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group mb-0">
-                                            <label class="my-2 pb-1">Tgl Penerimaan</label>
+                                            <label class="my-2 pb-1">Tgl Penyerahan</label>
                                             <input type="date" class="form-control" name="tgl_receive" required
-                                                value="{{ old('tgl_receive') }}" placeholder="Tgl Penerimaan" />
+                                                value="{{ old('tgl_receive') }}" placeholder="Tgl Penyerahan" />
                                             {!! $errors->first('tgl_receive', '<div class="invalid-validasi">:message</div>') !!}
                                         </div>
                                     </div>

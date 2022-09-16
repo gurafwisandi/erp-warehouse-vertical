@@ -11,8 +11,13 @@
                 <li class="list-inline-item dropdown notification-list">
                     <a class="nav-link dropdown-toggle arrow-none waves-effect nav-user" data-toggle="dropdown"
                         href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                        <img src="{{ URL::asset('files/foto/' . Auth::user()->foto) }}" alt="user"
-                            class="rounded-circle">
+                        @if (Auth::user()->foto)
+                            <img src="{{ URL::asset('files/foto/' . Auth::user()->foto) }}" alt="user"
+                                class="rounded-circle">
+                        @else
+                            <img src="{{ URL::asset('assets/images/users/avatar-1.jpg') }}" alt="user"
+                                class="rounded-circle">
+                        @endif
                     </a>
                     <div class="dropdown-menu dropdown-menu-right profile-dropdown ">
                         <div class="dropdown-item noti-title">

@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            @if (Auth::user()->roles == 'Produksi')
+                            @if (Auth::user()->roles == 'Admin')
                                 <p class="text-muted mb-4 font-14">
                                     <a class="btn btn-success" href="{{ route('item.create') }}">Tambah</a>
                                 </p>
@@ -55,11 +55,11 @@
                                                 <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                                     <div class="btn-group btn-group-sm" style="float: none;">
                                                         <?php $id = Crypt::encryptString($item->id); ?>
-                                                        <form class="delete-form"
-                                                            action="{{ route('item.destroy', $id) }}" method="POST">
+                                                        <form class="delete-form" action="{{ route('item.destroy', $id) }}"
+                                                            method="POST">
                                                             @csrf
                                                             @method('DELETE')
-                                                            @if (Auth::user()->roles == 'Produksi')
+                                                            @if (Auth::user()->roles == 'Admin')
                                                                 <button type="button"
                                                                     class="tabledit-delete-button btn btn-sm btn-danger delete_confirm"
                                                                     style="float: none; margin: 5px;">

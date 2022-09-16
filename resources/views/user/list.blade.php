@@ -19,7 +19,7 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            @if (Auth::user()->roles == 'Produksi')
+                            @if (Auth::user()->roles == 'Admin')
                                 <p class="text-muted mb-4 font-14">
                                     <a class="btn btn-success" href="{{ route('user.create') }}">Tambah</a>
                                 </p>
@@ -50,7 +50,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if (Auth::user()->roles == 'Purchasing')
+                                                @if (Auth::user()->roles == 'Admin')
                                                     <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                                         <div class="btn-group btn-group-sm" style="float: none;">
                                                             <?php $id = Crypt::encryptString($item->id); ?>

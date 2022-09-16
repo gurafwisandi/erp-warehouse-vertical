@@ -90,6 +90,7 @@
                                             <th>No</th>
                                             <th>Item</th>
                                             <th>Qty</th>
+                                            <th>Tgl Produksi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -99,6 +100,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $dat->items->nama . ' - ' . $dat->items->panjang . 'm' }}</td>
                                                 <td>{{ $dat->qty . ' ' . $dat->items->satuan }}</td>
+                                                <td>{{ $dat->tgl_produksi }}</td>
                                                 <td>
                                                     <div class="tabledit-toolbar btn-toolbar" style="text-align: left;">
                                                         <?php $id = Crypt::encryptString($dat->id); ?>
@@ -159,6 +161,10 @@
                         <div class="form-group">
                             <label class="my-2 pb-1">Qty</label>
                             <input type="number" class="form-control" name="qty" placeholder="Qty" required />
+                        </div>
+                        <div class="form-group">
+                            <label class="my-2 pb-1">Tanggal Produksi</label>
+                            <input type="date" class="form-control" name="tgl_produksi">
                         </div>
                         <div class="form-group mb-0">
                             <button type="submit" class="btn btn-primary waves-effect waves-light">

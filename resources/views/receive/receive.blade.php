@@ -62,6 +62,7 @@
                                                 <th>No</th>
                                                 <th>Item</th>
                                                 <th>Qty</th>
+                                                <th>Tgl Produksi</th>
                                                 <th>Qty yang diterima</th>
                                             </tr>
                                         </thead>
@@ -72,6 +73,7 @@
                                                     <td>{{ $detail->items->nama . ' - ' . $detail->items->panjang . 'm' }}
                                                     </td>
                                                     <td>{{ $detail->qty . ' ' . $detail->items->satuan }}</td>
+                                                    <td>{{ $detail->tgl_produksi }}</td>
                                                     <td>{{ $detail->qty_terima }}
                                                         @if ($detail->qty_terima)
                                                             {{ $detail->items->satuan }}

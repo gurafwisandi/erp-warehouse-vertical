@@ -17,7 +17,8 @@ use Illuminate\Support\Facades\DB;
 
 class ReceiveController extends Controller
 {
-    protected $menu = 'penerimaan';
+    protected $menu = 'Penyerahan';
+    protected $menu_gudang = 'Penerimaan';
 
     /**
      * Display a listing of the resource.
@@ -27,8 +28,13 @@ class ReceiveController extends Controller
     public function index()
     {
         $item = ReceiveModel::orderBy('id', 'DESC')->get();
+        if (Auth::user()->roles == 'Gudang') {
+            $menu = $this->menu_gudang;
+        } else {
+            $menu = $this->menu;
+        }
         $data = [
-            'menu' => $this->menu,
+            'menu' => $menu,
             'title' => 'list',
             'list' => $item,
         ];
@@ -210,8 +216,13 @@ class ReceiveController extends Controller
 
     public function penempatan($id)
     {
+        if (Auth::user()->roles == 'Gudang') {
+            $menu = $this->menu_gudang;
+        } else {
+            $menu = $this->menu;
+        }
         $data = [
-            'menu' => $this->menu,
+            'menu' => $menu,
             'title' => 'penempatan',
             'item' => ReceiveModel::findorfail(Crypt::decryptString($id)),
             'details' => ReceiveDetailModel::where('id_receive', Crypt::decryptString($id))->get(),

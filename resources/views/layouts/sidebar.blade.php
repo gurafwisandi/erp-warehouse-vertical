@@ -40,10 +40,13 @@
                     </a>
                 </li>
                 <li class="has-submenu ">
-                    <a href="{{ route('receive.index') }}"
-                        {{ Request::segment(1) == 'receive' ? 'active' : '' }}">
+                    <a href="{{ route('receive.index') }}" {{ Request::segment(1) == 'receive' ? 'active' : '' }}">
                         <i class="typcn typcn-download"></i>
-                        <span> Penerimaan</span>
+                        @if (Auth::user()->roles == 'Gudang')
+                            <span> Penerimaan</span>
+                        @else
+                            <span> Penyerahan</span>
+                        @endif
                     </a>
                 </li>
                 <li class="has-submenu ">
@@ -56,7 +59,7 @@
                 <li class="has-submenu ">
                     <a href="#"><i class="typcn typcn-clipboard"></i>Report</a>
                     <ul class="submenu">
-                        <li><a href="{{ route('report.penerimaan') }}">Request</a></li>
+                        <li><a href="{{ route('report.penerimaan') }}">Penyerahan</a></li>
                         <li><a href="{{ route('report.rep_pengeluaran') }}">Pengeluaran</a></li>
                         <li><a href="{{ route('report.rep_sales') }}">Sales</a></li>
                         <li><a href="{{ route('report.rep_item') }}">Persediaan Item</a></li>
